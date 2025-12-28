@@ -1,0 +1,26 @@
+
+Example prompts
+Genres for suno music
+Suno can mix and mash any genre together, try some combinations of mood, genre, instruments and style.
+Create a style prompt
+Fusion prompt list
+1. Jazz-Hop:
+“Smooth swing rhythms with strong bass beats, soulful saxophone solos, rhythmic vocal flow, intricate piano melodies, catchy hooks.”
+2. Rocktronica:
+“Energetic guitar riffs with dynamic beats, powerful drum beats, engaging synthesizers, strong vocal presence, anthemic choruses.”
+3. Pop-Soul:
+“Catchy melodies with rich vocal harmonies, upbeat rhythms, deep bass lines, engaging vocals, emotional lyrics.”
+4. Country-Rock:
+“Twangy guitar riffs with powerful drum beats, storytelling lyrics, anthemic choruses, harmonious vocal arrangements, dynamic solos.”
+5. Reggae-Dubstep:
+“Laid-back rhythms with intense dubstep oscillations, offbeat guitar strums, profound musical drops, deep bass lines, relaxed vocal style.”
+6. Classical-Trance:
+“Orchestral arrangements with powerful trance synthesizers, rich harmonies, blissful ascents, dynamic crescendos, gigantic musical drops.”
+7. Blues-Funk:
+“Expressive guitar solos with syncopated rhythms, emotive vocal delivery, groovy bass lines, rhythmic shuffles, energetic vocals.”
+8. Metal-Hip Hop:
+“Heavy guitar riffs with strong bass beats, aggressive drum beats, rhythmic vocal flow, powerful vocals, impactful lyrics.”
+9. Folk-EDM:
+“Acoustic guitar melodies with vibrant basslines, storytelling lyrics, engaging synthesizers, harmonious vocals, ready-for-club mixes.”
+10. Latin-Indie:
+“Rhythmic percussion with unique vocal styles, vibrant brass, experimental arrangements, lively vocal performances, eclectic influences.”

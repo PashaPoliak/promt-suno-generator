@@ -1,0 +1,22 @@
+
+Style and lyrics
+Should my style prompt use commas
+Should Style Prompts in Suno Use Commas?
+According to Suno developers, commas used in the Style Prompt will create a ‘balanced’ list where each item has an equal chance of contributing to the song.
+Using Style Prompts Without Commas
+Style Prompts without commas should follow language conventions. Typically, one word modifies another, and style words may work better when changed to descriptive text.
+For example, the prompt
+Loud, Rock, Guitars
+is different from
+Loud Rock Guitars
+.
+However, the extent of this difference is debatable. All three words are compatible with the ‘rock’ genre, and ‘loud’ and ‘guitars’ are so common in rock that these words might be unnecessary. You may get better results with shorter, simpler prompts.
+Using Commas in Metatags
+Metatags can use commas to make multiple commands within the same tag, but it’s usually a good idea to keep tags short, or they might be sung aloud.
+Example:
+[soft guitar, male narrator]
+Combining Commas and Descriptions
+A typical Style Prompt might combine short descriptions in a comma-separated list:
+dreamy shoegaze, pulsing Yamaha bass, raw distorted guitars, warm synthpads, slow female whisper
+For the list to be weighted equally, the prompt needs to include a space after each comma.
+Other punctuation should work similarly to commas.

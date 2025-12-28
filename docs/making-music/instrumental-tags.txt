@@ -1,0 +1,28 @@
+
+Making music
+Customizing instruments
+Customizing Instruments for Unique Songs
+When prompting Suno, you can create unique instrumental sections that add depth and variety to your songs. By customizing instruments in Suno, you can create distinct musical breaks that complement your verses and choruses. This guide will show you how to prompt Suno effectively to tailor instruments to your desired sound.
+Prompting Suno for Instrumental Sections
+To create instrumental sections when prompting Suno, use tags similar to [Verse] and [Chorus], but without lyrics. These sections might not be as clearly defined, but they can serve as standalone sections or brief transitions in the music. For best results when prompting Suno, use only one instrumental tag at a time, but feel free to experiment with adding commas within the prompt to combine them.
+Examples of Instrument Prompts for Suno
+When prompting Suno, try these instrument tags to customize your song:
+[Haunting Piano Interlude]
+[Funky Saxophone Break]
+[Pulsing Synth Bass]
+[Tribal Drum Break]
+[Slap Bass Groove]
+[Soaring Electric Guitar Solo]
+[Orchestral Buildup]
+[Dubstep Bass Drop]
+Tailoring Instruments to the Genre in Suno Prompts
+The genre is crucial when prompting Suno to customize instruments. To effectively manipulate an instrument using metatags, you may need to describe it within the Style Prompt.
+For example, a [Dubstep Bass Drop] would fit perfectly in an EDM-inspired track but might sound out of place in a folk song driven by acoustic guitar.
+Similarly, a [Bluegrass Fiddle Break] will likely work better within a Country-genre song than in a Hip Hop beat. However, adding a ‘fiddle’ to the style prompt when prompting Suno might make it work in unexpected genres. Experiment to find unique combinations!
+Using ‘Instrumental Lyrics’ in Suno Prompts
+When prompting Suno, you can sometimes use non-singable text to create instrumental sounds. Try using a few lines of punctuation to force a short instrumental solo.
+Though less reliable and sometimes humorous, you can also try using onomatopoeic words that imitate the sounds of the instruments when prompting Suno. While they might be sung as lyrics, they can occasionally trigger the desired instrument.
+[Jazzy Trumpet Break] . .! .. .! !! … ! ! !
+[wailing electric guitar] wah-Wah-WAH-SCREECH
+[funky slap bass] bowm-bowm-b-b-bowm-bowm
+By understanding how to prompt Suno effectively to customize instruments, you’ll be able to create unique, genre-bending songs that showcase your creativity. Don’t be afraid to experiment with different prompts and combinations to find the perfect sound for your track.

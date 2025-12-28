@@ -1,0 +1,15 @@
+
+Common problems
+My song is making weird noises
+Prompting Suno to Prevent Weird Noises
+When prompting Suno, you may encounter “voice hallucinations” - instances where the AI singing voice (Suno) deviates from the intended lyrics or generates gibberish words. While it’s not possible to ‘fix’ the lyrics on a clip after it’s been created, you can take steps to prevent the same problem from occurring when regenerating. Here’s how to prompt Suno to avoid voice hallucinations and unwanted singing.
+Prompting Suno for Instrumentals
+When creating instrumentals, you can usually leave the Lyrics prompt blank. However, some lyric-heavy genres may cause Suno to sing anyway. To prevent this, add an ‘instrumental’ metatag to the lyrics text when prompting Suno:
+[Melodic Instrumental]
+Some genres, such as Pop and Gospel, are more likely to have songs arranged around vocals. In these cases, Suno might hallucinate lyrics and a voice even when you don’t provide any lyrics.
+As a last resort, try adding “instrumental” as the song type in the Style/Genre prompt when prompting Suno:
+downbeat instrumental rock
+low-fi instrumental hiphop
+synthwave edm dubstep
+By understanding how to prompt Suno effectively to prevent voice hallucinations and unwanted singing, you’ll be able to create instrumentals and songs that align with your creative vision. Experiment with different prompting techniques, metatags, and troubleshooting methods to master the art of controlling Suno’s output.
+My lyrics are wrong

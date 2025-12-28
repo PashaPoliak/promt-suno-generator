@@ -1,6 +1,7 @@
 import os
 import time
 import re
+import logging
 from urllib.parse import urljoin, urlparse
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
@@ -11,6 +12,10 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.action_chains import ActionChains
 from selenium.common.exceptions import TimeoutException, NoSuchElementException, StaleElementReferenceException
 from webdriver_manager.chrome import ChromeDriverManager
+
+# Set up logging
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 class SunoWebsiteParserSelenium:
     def __init__(self, base_url):
@@ -97,11 +102,11 @@ class SunoWebsiteParserSelenium:
                 f.write("\n" + "="*80 + "\n\n")
                 f.write(content_text)
             
-            print(f"✓ Saved: {category}" + (f" > {subcategory}" if subcategory else "") + f" ({filename})")
+            logger.info(f"✓ Saved: {category}" + (f" > {subcategory}" if subcategory else "") + f" ({filename})")
             return True
             
         except Exception as e:
-            print(f"✗ Error saving content: {str(e)}")
+            logger.error(f"✗ Error saving content: {str(e)}")
             return False
     
     def expand_nav_item(self, nav_item):
@@ -117,7 +122,7 @@ class SunoWebsiteParserSelenium:
                 
                 # If it's not expanded (rotate-0 or similar), click to expand
                 if 'rotate-0' in svg_classes or 'rotate-90' in svg_classes or 'rtl:rotate-180' not in svg_classes:
-                    print(f"    ↳ Expanding submenu...")
+                    logger.debug(f"    ↳ Expanding submenu...")
                     chevron.click()
                     time.sleep(1)  # Wait for submenu to expand
                     return True
@@ -128,7 +133,7 @@ class SunoWebsiteParserSelenium:
                     # Check if this button has expand/collapse functionality by looking at its attributes
                     aria_expanded = expand_button.get_attribute('aria-expanded')
                     if aria_expanded == 'false':
-                        print(f"    ↳ Expanding submenu via aria-expanded...")
+                        logger.debug(f"    ↳ Expanding submenu via aria-expanded...")
                         expand_button.click()
                         time.sleep(1)
                         return True
@@ -147,7 +152,7 @@ class SunoWebsiteParserSelenium:
             # No chevron found, so this item doesn't have a submenu
             pass
         except Exception as e:
-            print(f"    ↳ Warning: Could not expand nav item: {str(e)}")
+            logger.warning(f"    ↳ Warning: Could not expand nav item: {str(e)}")
         
         return False
     
@@ -173,7 +178,7 @@ class SunoWebsiteParserSelenium:
                         container_items = nav_container.find_elements(By.CSS_SELECTOR, 'li')
                         if container_items:
                             nav_items.extend(container_items)
-                            print(f"Found {len(container_items)} navigation items using selector: {selector}")
+                            logger.info(f"Found {len(container_items)} navigation items using selector: {selector}")
                 except NoSuchElementException:
                     continue
             
@@ -197,7 +202,7 @@ class SunoWebsiteParserSelenium:
             nav_items = unique_nav_items
             
         except Exception as e:
-            print(f"Error finding navigation items: {str(e)}")
+            logger.error(f"Error finding navigation items: {str(e)}")
         
         return nav_items
     

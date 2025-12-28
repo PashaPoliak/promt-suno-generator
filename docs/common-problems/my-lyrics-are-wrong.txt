@@ -1,0 +1,17 @@
+
+Common problems
+My lyrics are wrong
+Prompting Suno to Fix Incorrect Lyrics After Extending
+When prompting Suno to extend a song, you may encounter issues with the AI singing random words, repeating sections, or generating gibberish. These hallucinations indicate that the bot has lost its place in the lyrics. While it may pick up the song later in the clip and continue as if nothing happened, it could also continue to hallucinate and never return to the correct lyrics. Here’s how to prompt Suno to fix incorrect lyrics after extending.
+Techniques for Prompting Suno with Correct Lyrics
+There is no hard rule that works every time, and the best approach may depend on the pace of the lyrics:
+For slow lyrics, try prompting Suno with the next word in the sequence.
+For fast lyrics, try adding a line or two that have already been sung as a lead-in when prompting Suno.
+Experiment with both techniques and develop an ear for which method is more likely to work for a particular song.
+Troubleshooting: When Prompting Suno Fails
+Small differences in the continuation clips are normal, but if the lyrics go haywire on both clips, there might be an issue with the clip being continued from. Consider these steps when prompting Suno:
+Go back to an earlier clip and regenerate the clip you’re continuing from, hoping for a better ending.
+With v3, use the Continue From Time feature to select an earlier point where the continuation may be cleaner.
+By understanding how to prompt Suno effectively to fix incorrect lyrics after extending, you’ll be able to create seamless, coherent songs that stay true to your original vision. Experiment with different prompting techniques and troubleshooting methods to master the art of extending songs with Suno.
+Improving quality of song
+My song is making weird noises

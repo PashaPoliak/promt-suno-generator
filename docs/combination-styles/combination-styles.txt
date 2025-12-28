@@ -1,0 +1,216 @@
+
+Combination styles
+Combine prompts together to create unique sounds
+My favorite thing to do with suno is combine styles in prompts. Try generating the first 15 to 30 seconds of a song, then mixing up the prompt to create more dynamic songs.
+Example suno prompt technique: Start with a vibrant violin solo, then extend the song into ethereal lo-fi dubstep.
+Example suno prompts to try
+Gentle, tranquil acoustic, deep blues
+then change it up by extending with another prompt.
+Melancholic, introspective indie rock layered with bright pop elements
+then mix it up by clicking extend using another prompt.
+Mood and Atmosphere prompts for suno
+Atmospheric
+Ambient
+Ethereal
+Euphoric
+Mystical
+Dreamy
+Surreal
+Tranquil
+Serene
+Haunting
+Intoxicating
+Eerie
+Celestial
+Chilling
+Melancholic
+Apocalyptic
+Textural and Dynamic prompts for suno
+Airy
+Dense
+Fluid
+Smooth
+Rough
+Textured
+Layered
+Blurred
+Crisp
+Fuzzy
+Sparkling
+Glossy
+Transparent
+Luminous
+Vibrant
+Shimmering
+Rhythmic and Musical prompts for suno
+Rhythmic
+Percussive
+Melodic
+Harmonic
+Polyphonic
+Syncopated
+Dynamic
+Staccato
+Crescendoing
+Descending
+Ascending
+Cadenced
+Dotted
+Arhythmic
+Cross-rhythmic
+Emotional and Expressive prompts for suno
+Emotional
+Joyous
+Sad
+Angry
+Aggressive
+Gentle
+Warm
+Cold
+Festive
+Nostalgic
+Romantic
+Passionate
+Soothing
+Inspiring
+Soulful
+Technological and Synthetic prompts for suno
+Digital
+Analog
+Electronic
+Robotic
+Cybernetic
+Futuristic
+Synthetic
+Automated
+Virtual
+Algorithmic
+Biotechnological
+Style and Genre Influences prompts for suno
+Baroque
+Classical
+Jazz
+Funky
+Disco
+Punk
+Rock
+Pop
+Hip-hop
+Reggae
+Folk
+Country
+Blues
+Industrial
+Techno
+Movement and Energy prompts for suno
+Explosive
+Fast-paced
+Slow
+High-energy
+Lethargic
+Static
+Chaotic
+Controlled
+Spontaneous
+Cinematic
+Dramatic
+Climactic
+Bouncing
+Flowing
+Pulsating
+Nature and Environment prompts for suno
+Oceanic
+Forest-like
+Urban
+Desert
+Mountainous
+Space
+Underwater
+Atmospheric
+Geographical
+Seasonal
+Weather-related
+Sensory and Perception prompts for suno
+Visual
+Textural
+Sonic
+Tactile
+Olfactory
+Gustatory
+Intuitive
+Cognitive
+Psychological
+Emotional
+Quality and Craft prompts for suno
+Polished
+Refined
+Raw
+Crafted
+Artisanal
+Innovative
+Traditional
+Modern
+Retro
+Sophisticated
+Simple
+Complex
+Detailed
+Minimalist
+Experimental and Avant-Garde prompts for suno
+Avant-garde
+Experimental
+Abstract
+Non-conformist
+Unconventional
+Alternative
+Cutting-edge
+Novel
+Unique
+Innovative
+Pioneering
+Social and Cultural prompts for suno
+Cultural
+Social
+Political
+Community-focused
+Ancestral
+Heritage
+Patriotic
+Regional
+Global
+Historical
+Example combination suno prompts
+Atmospheric, ethereal jazz with vibrant, rhythmic synth pulses
+Dynamic, percussive rock fused with nostalgic, glossy disco vibes
+Urban, funky hip-hop blended with raw, expressive blues elements
+Eerie, haunting techno with complex, cross-rhythmic, cinematic layers
+Warm, soulful reggae rhythms paired with crisp, transparent pop melodies
+Chilling, surreal ambient sounds meet explosive, high-energy industrial beats
+Retro, polished funk combined with aggressive, analog punk energy
+Flowing, smooth classical elements intertwined with sharp, futuristic electronic
+Luminous, shimmering folk tunes enriched with deep, textured atmospheric pads
+Robotic, cybernetic country twangs fuse with serene, tranquil forest-like ambiences
+Melodic, harmonic metal with ethereal, celestial overtones
+Crunchy, gritty rock with pulsating, explosive techno undertones
+Cool, breezy jazz with rhythmic, syncopated reggae grooves
+Dense, layered electronic vibes with airy, ambient melodies
+Aggressive, raw punk fused with sophisticated, baroque classical
+Smooth, soulful R&B blends with eclectic, vibrant world beats
+Dreamy, surreal pop interlaced with hard, rhythmic techno
+Gentle, tranquil acoustic paired with deep, robust blues
+Fiery, passionate salsa rhythms underpinning subdued, minimalist techno
+Rough, textured industrial sounds paired with glossy, transparent disco grooves
+Nostalgic, retro synthwave with a touch of modern, dynamic trap
+Complex, polyphonic orchestral arrangements with simple, crisp electronic beats
+Dramatic, cinematic soundscapes combined with steady, pulsating drum and bass
+Energetic, high-energy funk mixed with serene, smooth ambient flows
+Fast-paced, chaotic punk energy with methodical, rhythmic jazz undertones
+Lush, vibrant tropical beats interwoven with cool, airy Nordic ambient
+Melancholic, introspective indie rock layered with bright, sparkling pop elements
+Dark, brooding gothic tones blended with uplifting, euphoric trance
+Slow, flowing reggae grooves contrasted with fast-paced, urgent techno
+Light, fluffy cloud rap vibes meeting deep, shadowy underground techno
+Sharp, metallic industrial clashes with warm, organic folk melodies
+Soothing, calming new age sounds with complex, aggressive
+Artist builder
+Common genres

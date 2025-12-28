@@ -1,0 +1,51 @@
+
+Common problems
+How to Structure Prompts for Suno AI
+Suno is prone to errors like songs not ending, lyrics sung incorrectly, song making unexpected noises. There are some things you can try to successfully create full songs.
+How do I end the song?
+These tips can help, but remember each generation is random. It’s better to pick a ‘good’ ending than to burn through credits hoping for a ‘perfect’ ending.
+Song Structure
+Songs generate clips with endings after a full verse and chorus cycle. It can also resist ending if it has more of the cycle left to complete.
+If the song ends abruptly within the 1st clip, you might need to structure the song with lyrics and metatags.
+Wrap up
+It can help to tell Suno to ‘wrap up’ the song in a final clip before trying to end it. Some known prompts and lyric tips:
+[Outro]
+[Refrain]
+[Finale]
+[Big Finish]
+End Tags
+These metatags might trigger the end of the song and stop the clip:
+[End]
+[Fade Out]
+[Fade Out and End]
+Use ‘end’ in the Style
+A more aggressive method is to clear the Style and Lyric prompts completely, and prompt for an end only.
+Clear the Style Prompt and replace it with the word ‘End’.
+Add an [End] tag to the Lyrics Prompt.
+Endless Loop
+Some genres might to settle into a loop that doesn’t progress, or an outro that never fades out. Trim the end of a clip, or create a manual fade-out with free audio editing software.
+How to Make Longer Songs with Suno
+Wondering how to prompt Suno to create longer songs? With the Extend feature, available in all Suno plans (Free, Pro, and Premier), you can seamlessly extend clips or full songs up to 1 minute. Here’s a guide on prompting Suno for extended clips.
+Extending Clips with Simple Suno Prompts
+Click the EXTEND button on the clip you wish to extend.
+Extend from the original clip to create Part 2, then from Part 2 to create Part 3, and so on until the song reaches the desired length.
+Each generation will be labeled next to the clip’s name, with two clips created per job. You may see more if you re-roll a generation.
+Selecting a continued clip will highlight the earlier parts on the Create page.
+Prompting Suno for Full Songs
+To get a full song, click on the […] button on the final clip and choose Get Whole Song. The resulting clip will have all the parts stitched together seamlessly as one audio clip. No credits are charged for Get Whole Song, and the clip will be labeled as a Full Song. You can also use “Get Whole Song” between parts and then extend the result further.
+Advanced Prompting:
+Extend From ending
+The selected clip will load into the Extend From panel, and all generations will continue from the end of this clip. Use the Clear button to unload the Extend From panel.
+Extend From timestamp
+New in v3, the Extend From Time feature allows you to continue from an earlier point within the clip using a timestamp window (minutes:seconds). This is useful when:
+The song ended too soon and can’t continue the usual way
+There’s a mistake in the text or singing
+You don’t like the end of the clip
+You want to force the song to change its style
+You want to create an instrumental lead-in before lyrics
+Prompting Suno with Custom Mode for Lyrics and Style
+To change the lyrics for the next part, switch on Custom Mode to access the Lyrics and Style prompts. Update the lyrics to continue with another verse and chorus (see “My words are wrong after Continue” for tips). You may also change the style prompt or keep it the same.
+Conclusion
+By understanding how to prompt Suno for extended clips and full songs, you’ll be able to create longer, more dynamic compositions tailored to your vision.
+Should my style prompt use commas
+Suno lyrics not working

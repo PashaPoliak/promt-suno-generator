@@ -1,0 +1,48 @@
+
+Style and lyrics
+Adding style prompts to lyrics in Suno
+When prompting Suno, you can use metatags to influence the song structure beyond the basic verse/chorus pattern. While the AI tends to have a mind of its own and may follow its own pattern, these tags can help guide the composition. Here’s how to use song structure tags effectively when prompting Suno.
+[Instrumental Intro]
+...optional lyrics...
+[Catchy Verse]
+...lyrics...
+[Chorus]
+...lyrics...
+[Bass Drop]
+...lyrics...
+[Guitar Solo Interlude]
+[Bass Drop]
+[End]
+Prompting Suno for Intros
+The [Intro] tag is notoriously unreliable. Instead, try describing it as an instrumental break:
+[Short Instrumental Intro]
+Creating Hooks with Suno Prompts
+A hook is a repetitive phrase or instrumental. To create a hook, try repeating a short line 2-4 times with or without the label:
+[Catchy Hook]
+Using Breaks in Suno Prompts
+A break is a few bars where the lead instruments or singer go silent, and the accompanying instruments play. Use the [Break] tag strategically to interrupt the current pattern:
+[Break]
+or
+[Percussion Break]
+Prompting Suno for Interludes
+The [Interlude] tag is useful for creating an instrumental section within the lyrics:
+[melodic interlude]
+Crafting Outros with Suno Prompts
+An Outro can help prime the song to end and may create a loop to fade out in post-edit. Use these tags to wrap up the song:
+[Outro]
+or
+[Refrain]
+or
+[Big Finish]
+“Refrain” tends to get more ‘creative’ when wrapping up the end of the song, while “Big Finish” may change the melody or tempo to create a climax.
+Prompting Suno to End the Song
+An [End] tag in the lyrics may work best alone as its own clip. Clear the Style Prompt or add ‘End’ to the style description:
+[End]
+or
+[Fade Out]
+or
+[Fade to End]
+See
+How do I end the song?
+for more tips.
+Remember, prompting an AI is not like paying someone to edit your music on Fiverr. The reliability of these tags can be influenced by the lyrics, the song cycle, and the AI’s randomness. Experiment with different combinations and placements of song structure tags when prompting Suno to achieve the desired composition.

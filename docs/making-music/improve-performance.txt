@@ -1,0 +1,75 @@
+
+Making music
+Improve performance
+How to Improve Suno’s Performance after prompting
+Understanding the Problem
+Many Suno users have noticed that it struggles to generate accurate voices and beats for
+Hiphop, Rap, and Trap music
+. The generated accents often sound off, sometimes leaning towards a British accent rather than the desired
+Southern
+,
+New York
+, or
+West Coast
+styles. Here are some tips to improve Suno’s results with optimized Suno prompts.
+Strategy 1: Try Different Genres to Enhance Suno Prompts
+A popular suggestion among users is to experiment with different genres and combine them to get the sound you’re looking for. Once you’ve found the right mix, you can use tools like
+“ultimate vocal remover 5”
+to modify the voice style and add new lyrics.
+By creating a
+60-second vocal file
+, you provide Suno enough data to recreate the voice in a different style using a Suno prompt.
+Strategy 2: Use Specific Suno Prompts for Desired Accents
+Customizing your Suno prompts
+to specify accent and style can make a big difference. Including
+tags for specific sub-genres
+or regional styles in your prompts can help generate more accurate results.
+Examples:
+Use
+“Memphis trap”
+or
+“Atlanta trap”
+to achieve a Southern accent.
+Add
+“west coast gangsta rap”
+or
+“Compton hip-hop beat”
+for West Coast sounds.
+The right Suno prompt makes all the difference in getting authentic music.
+Strategy 3: Experiment with Unique Genre Combinations
+Mixing unexpected genres in your Suno prompts can create unique and interesting results. Some users have had success by blending
+soul
+,
+blues
+, or even
+country
+with Hiphop or Trap for fresh, new vocal styles.
+Examples:
+Use
+soul and blues prompts
+with trap to achieve an R&B vocal feel.
+Experiment with different combinations of Suno prompts to discover what works best for your track.
+Strategy 4: Address Quality Issues with Suno Prompts
+If Suno gives you inconsistent or unexpected results, don’t hesitate to adjust your prompts. You can also dispute quality issues through their system.
+Pro Tip:
+Using
+“Phonk Drum”
+as a Suno prompt often generates more accurate hip-hop beats.
+Additional Tips for Using Suno Prompts Effectively
+Tip 1: Write Your Prompts in the Desired Accent
+For better accent accuracy, write your Suno prompts in the style you’re aiming for. Use
+regional slang
+or common phrases from the accent you want, whether it’s Southern, New York, or West Coast.
+Tip 2: Follow Suno’s Terms of Service
+Ensure that any vocal tracks you generate with Suno comply with their terms of service, especially if you plan to reuse them in your music or share them publicly.
+Tip 3: Keep Experimenting with Suno Prompts
+It may take several tries to get the sound you want, so
+don’t give up
+! Continue refining your Suno prompts to enhance the music generation process.
+Conclusion: Improve Your Hiphop, Rap, and Trap Music with Suno
+By following these strategies and tips, you can
+enhance the quality
+of the
+Hiphop, Rap, and Trap music
+generated using Suno. Experiment with different Suno prompts, mix genres, and keep refining until you achieve the sound you want.
+Happy creating!

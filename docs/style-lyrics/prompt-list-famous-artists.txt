@@ -1,0 +1,365 @@
+
+Style and lyrics
+Prompt list of artist styles
+Artist prompt list of different styles
+Here is a prompt list of famous artists and their associated music styles. Use this as a guide to help inspire your own music-related prompt based on artists you enjoy.
+You can search to see if an artist you know is in this prompt list.
+Bruno Mars
+Funk, Dance Pop, Groovy, male vocals
+Fleetwood Mac
+Classic Rock, Mellifluous
+Ed Sheeran
+Folk, Acoustic Guitar, male vocals
+Tim McGraw
+Country, Americana, male vocals
+Elton John
+Piano Pop Rock, Theatrical, male vocals
+Dolly Parton
+Country, Storytelling, female vocals
+Red Hot Chili Peppers
+Funk Rock, Stadium, heavy drums
+Coldplay
+Alternative Rock, Atmospheric
+Taylor Swift
+Pop, Alternative Folk, Emotional, female vocals
+Elvis Presley
+50s Rock, Hero Theme, male vocals
+Adele
+Soul, Emotional, Torch-Lounge, female vocals
+Ariana Grande
+Pop, Dance Pop, Ethereal, female vocals
+Billie Eilish
+Pop, Dark, Minimal, female vocals
+The Weeknd
+RnB, Dark, Cinematic, male vocals
+Beyoncé
+RnB, Anthemic, Danceable, female vocals
+Kendrick Lamar
+HipHop, Lyrical, Storytelling, male vocals
+Lady Gaga
+Pop, Theatrical, Dance, female vocals
+Jay-Z
+HipHop, Aggressive, Storytelling, male vocals
+Rihanna
+RnB, Dance Pop, Festive, female vocals
+Kanye West
+HipHop, Progressive, Eclectic, male vocals
+Justin Bieber
+Pop, Danceable, Chillwave, male vocals
+Katy Perry
+Pop, Glitter, Festive, female vocals
+Snoop Dogg
+Rap, Funk, Chill, male vocals
+Metallica
+Heavy Metal, Power
+AC/DC
+Hard Rock, Stomp
+Madonna
+Dance Pop, High-NRG, female vocals
+David Bowie
+70s British Rock, Art, Eclectic, male vocals
+Bob Dylan
+Folk, Storytelling, Acoustic Guitar, male vocals
+Post Malone
+Rap, Ethereal, Ambient, male vocals
+Maroon 5
+Pop Rock, Danceable, male vocals
+Shakira
+Latin, Dance Pop, Festive, female vocals
+Dua Lipa
+Disco, Dance Pop, Groovy, female vocals
+Michael Jackson
+80s Pop, Dance, Iconic, male vocals
+Prince
+Funk, Eclectic, Glam, male vocals
+Miley Cyrus
+Pop, Rock, Party, female vocals
+Cardi B
+Rap, Aggressive, Party, female vocals
+Imagine Dragons
+Rock, Anthemic, Emotion
+Camila Cabello
+Pop, Latin Jazz, Festive, female vocals
+Harry Styles
+Pop, Rock, Groovy, male vocals
+Sam Smith
+Soul, Emotional, Lounge, male vocals
+Lizzo
+Pop, Funk, Empowering, female vocals
+Daft Punk
+Electronic, Dance, Futuristic
+Gorillaz
+Alternative Rock, Electronic, Unusual
+The Beatles
+60s British Pop, Classic, Rock
+Queen
+Rock, Operatic, Theatrical, Male Vocals
+Led Zeppelin
+Hard Rock, Blues Rock, Epic
+Pink Floyd
+Rock, Progressive, Atmospheric
+The Rolling Stones
+Rock, Blues Rock, Classic
+Bob Marley
+Reggae, Peaceful, Soulful, male vocals
+Frank Sinatra
+1940s big band, Lounge Singer, male vocals
+Aretha Franklin
+Soul, Gospel, Powerful, female vocals
+Whitney Houston
+Pop, RnB, Emotional, female vocals
+Stevie Wonder
+Soul, Funk, Joyful, male vocals
+The Chainsmokers
+EDM, Dance, Party
+Nicki Minaj
+Rap, Danceable, Bold, female vocals
+Green Day
+Punk Rock, Aggressive, Youthful
+Nirvana
+Grunge, Dark, Raw, Male Vocals
+Amy Winehouse
+Soul, Jazz, Torch-Lounge, female vocals
+Linkin Park
+Rock, Nu Metal, Emotional
+Aerosmith
+Rock, Hard Rock, Classic
+Bon Jovi
+Rock, Anthem, Stadium
+Billy Joel
+Pop, Rock, Storytelling, male vocals
+Phil Collins
+Pop, Rock, Emotional, soundtrack, male vocals
+Genesis
+Rock, Progressive, Art
+The Eagles
+Rock, Country Rock, Harmonious
+The Doors
+Rock, Psychedelic, Mysterious
+Janis Joplin
+Rock, Blues Rock, Raw Emotion, female vocals
+Jimi Hendrix
+Rock, Psychedelic, Guitar Virtuoso, male vocals
+The Who
+Rock, Hard Rock, Theatrical
+Black Sabbath
+Heavy Metal, Doom
+Iron Maiden
+Heavy Metal, Epic, Theatrical
+Judas Priest
+Heavy Metal, Power, Leather
+Motorhead
+Heavy Metal, Rock’n’Roll, Aggressive
+Slayer
+Thrash Metal, Aggressive, Dark
+Ozzy Osbourne
+Heavy Metal, Dark, Theatrical, male vocals
+Skrillex
+Dubstep, Electronic, Intense, male vocals
+Calvin Harris
+EDM, Dance, Festive, male vocals
+Avicii
+EDM, Melodic, Euphoric, male vocals
+Arctic Monkeys
+Indie Rock, Garage, Cool
+Tame Impala
+Psychedelic Rock, Dreamy, Mellifluous
+The Strokes
+Indie Rock, Cool, Raw
+Vampire Weekend
+Indie Rock, Eclectic, Upbeat
+Kings of Leon
+Rock, Emotional, Raw
+The Killers
+Rock, Synthpop, Anthemic, male vocals
+System of a Down
+Metal, Political, Eccentric
+Radiohead
+Alternative Rock, Experimental, Atmospheric
+Foo Fighters
+Rock, Alternative, Energetic
+Muse
+Rock, Progressive, Theatrical
+Tool
+Progressive Metal, Dark, Complex
+Rage Against the Machine
+Rap Metal, Political, Aggressive
+Pearl Jam
+Grunge, Rock, Emotional
+Soundgarden
+90s Grunge, Heavy, Dark
+Alice in Chains
+Grunge, Dark, Melodic
+Sigur Rós
+Post-Rock, Ethereal, Atmospheric, Icelandic
+Björk
+Alternative, Experimental, Unusual, female vocals
+Enya
+New Age, Ethereal, Calm, female vocals
+Deadmau5
+Electronic, House, Progressive
+Marshmello
+EDM, Dance, Happy
+Zedd
+EDM, Dance Pop, Energetic, male vocals
+The XX
+Indie Pop, Minimal, Atmospheric
+Lana Del Rey
+Pop, Sadcore, Cinematic, female vocals
+Kacey Musgraves
+Country, Pop, Mellifluous, female vocals
+St. Vincent
+Art Rock, Eclectic, Unusual, female vocals
+Childish Gambino
+HipHop, Funk, Thoughtful, male vocals
+SZA
+RnB, Neo Soul, Emotional, female vocals
+Frank Ocean
+RnB, Soulful, Introspective, male vocals
+Tyler, The Creator
+HipHop, Eclectic, Unusual, male vocals
+Solange
+RnB, Soul, Artistic, female vocals
+Brockhampton
+HipHop, Alternative, Collective
+Janelle Monáe
+Funk, RnB, Sci-Fi, female vocals
+Mac DeMarco
+Indie Pop, Slacker Rock, Chill, male vocals
+Rufus Du Sol
+Electronic, Dance, Atmospheric
+Bon Iver
+Indie Folk, Ethereal, Intimate, male vocals
+Florence + The Machine
+Indie Rock, Dramatic, Ethereal
+Jack White
+Rock, Blues, Raw, male vocals
+Gary Clark Jr.
+Blues Rock, Soulful, Gritty, male vocals
+Leon Bridges
+Soul, RnB, Retro, male vocals
+Brittany Howard
+Rock, Soul, Powerful, female vocals
+Alabama Shakes
+Rock, Blues Rock, Soulful
+Glass Animals
+Psychedelic Pop, Groovy, Eclectic
+Portugal, The Man
+Alternative Rock, Psychedelic, Catchy
+FKA Twigs
+RnB, Electronic, Avant-Garde, female vocals
+The National:
+Indie Rock, Melancholy, Introspective
+MGMT:
+Psychedelic Pop, Electronic, Playful
+Empire of the Sun
+Electronic, Pop, Theatrical
+Grimes
+Art Pop, Electronic, Experimental, female vocals
+James Blake
+Electronic, Soul, Minimalist, male vocals
+The War on Drugs
+Indie Rock, Heartland Rock, Melodic
+Sufjan Stevens
+Indie Folk, Baroque Pop, Intimate, male vocals
+Bonobo:
+Downtempo, Electronic, Ambient
+Caribou
+Electronic, Psychedelic, Dance
+Four Tet
+Electronic, Ambient, Textural
+Jamie xx
+Electronic, House, Minimal
+Nicolas Jaar
+Electronic, Experimental, Atmospheric, male vocals
+Flying Lotus
+Electronic, Experimental HipHop, Fusion, male vocals
+Thundercat
+Funk, Jazz, Experimental, male vocals
+Kamasi Washington
+Jazz, Fusion, Epic, male vocals
+Massive Attack
+Trip Hop, Dark, Atmospheric
+Portishead
+Trip Hop, Dark, Cinematic
+Aphex Twin
+IDM, Electronic, Experimental, male vocals
+Boards of Canada
+IDM, Downtempo, Nostalgic
+Burial
+Dubstep, Ambient, Mysterious
+J Dilla
+HipHop, Soulful, Experimental, male vocals
+MF DOOM
+HipHop, Abstract, Lyrical, male vocals
+Kendrick Lamar
+HipHop, Conscious, Lyrical, male vocals
+Blink-182
+emo pop rock, male vocals
+Green Day
+Punk Rock, Aggressive, Youthful
+Phoebe Bridgers
+Bedroom, grungegaze, catchy, psychedelic, acoustic tape recording, female vocals
+Drake
+HipHop, Trap, male vocals
+Example song styles
+Dance and Electronic
+Energetic tropical house, vibrant melodies, calypso percussions, relaxed vocal styles, and a chill tempo
+Dynamic Balkan electro swing, spirited brass sounds, syncopated beats, ethnic tunes, and dance-inviting tempo
+Underground minimal techno, looped beats, slow evolutions, trance-inducing rhythms, and a deep bass presence
+Drum and bass with rapid breakbeats, heavy bass, and complex, choppy drum tracks
+Synthwave, evoking 1980s nostalgia with lush synthesizer melodies and retro-futuristic vibes
+Pop and Synth
+Dreamy synth pop, floating soundscapes, slowed rhythms, deep echoic vocals, and a mystical aura
+Angelic dream pop, glowing guitar tones, rich synthesizers, and a touch of melancholy
+Retro 80s vibes, slow beats, punk energy, nostalgic synth melodies, and an eerie undertone
+Synth-heavy 80s pop, spooky undertones, and a captivating melodic hook
+Bubblegum pop, characterized by catchy melodies, upbeat rhythms, and an accessible appeal
+Rock and Metal
+Revived glam rock, bold stage presence, glittering outfits, infectious melodies, and dynamic solos
+Energetic metal concerts, shredding guitars, orchestral overtones, and robust vocal performances
+Intense trap metal, heavy bass, shouting lyrics, frenzied soundscapes, and intense musical breaks
+Metal-themed anime opening tracks, dominated by intense male vocals and robust musical arrangements
+Progressive rock, known for its complex structures, extended musical compositions, and eclectic influences
+Punk and Indie
+Fusion of punk rock, ska vibes, rock energy, rap beats, and indie pop nuances
+Gritty hardcore punk, high-speed beats, rebellious lyrics, raw vocals, and a grassroots ethos
+Breezy indie surf rock, metallic guitar twangs, beachfront themes, breezy singing, and radiant melodies
+DIY grungegaze, ear-catching, psychedelic flair, raw acoustic recordings, and a vintage vibe
+Post-rock, emphasizing texture over traditional rock rhythms and melodies
+Hip Hop and Urban
+Fast-paced hip hop, heavy bass, rapid lyrical attack, minor tonality, and an aura of suspense
+Trap music, characterized by hi-hat rolls, heavy bass, and layered synths
+Old school hip hop, focusing on rhythmic beats and an emphasis on lyrical wordplay
+Rhythm and Blues (R&B)
+Smooth RnB, creamy rhythms, captivating vocals, nighttime moods, and sophisticated production
+Soul music with deep emotional delivery, vibrant brass accompaniments, and powerful vocal performances
+Neo-soul, blending classic soul influences with modern sounds, intricate rhythms, and poetic lyrics
+World and Ethnic
+Vibrant gypsy jazz, swift fingerstyle guitars, swinging beats, joyful fiddles, and a party-like feel
+Funk with a psychedelic twist, rhythmic bass, distorted guitars, vibrant effects, and punchy horn sections
+Afrobeat, combining African musical styles with jazz, funk, and complex rhythms
+Latin pop, fusing upbeat rhythms, catchy hooks, and a blend of English and Spanish lyrics
+Ambient and Experimental
+Deep dark ambient, ominous tones, slow-changing layers, and a chillingly obscure aura
+Cosmic ambient music, galactic themes, slowly unfolding sounds, exploring the vastness of space
+Complex math rock mixed with J-pop’s catchy melodies, funky rhythms, electronic dubstep, and fast EDM
+Noise music, utilizing unconventional sounds and distortion to create an immersive auditory experience
+Electroacoustic music, blending live traditional instruments with electronic processing
+Classical and Orchestral
+Expressive piano compositions, classical yet modern, with dynamic expressions and intricate performances
+Grand film scores, majestic orchestral arrangements, bold narratives, and emotional crescendos
+Elaborate baroque pop, complex tunes, grand orchestral support, refined harpsichord details, and lyrical depth
+Majestic Gregorian chants, ecclesiastical vocals, serene ambience, and spiritual resonance
+Chamber music with intricate string quartets, precise articulation, and classical harmony
+Opera performances featuring dramatic vocal expressions, elaborate stage designs, and rich orchestration
+Folk and Spiritual
+Traditional folk music, narrative-driven, soothing harmonies, acoustic strumming, and subtle drumming
+Empowering gospel music, robust choirs, hopeful lyrics, deep organ backgrounds, and enthusiastic claps
+Heavenly worship hymns, divine vocals, majestic orchestras, and spiritually lifting arrangements
+Appalachian folk, featuring banjo-driven melodies, authentic storytelling, and rustic harmonies
+Spiritual chants with meditative qualities, repetitive phrases, and a deep focus on inner peace
+Jazz and Lounge
+Time-honored jazz lounge, classic melodies, silky trumpet solos, acoustic bass, and enchanting vocals
+Smooth jazz with mellow saxophone tones, laid-back rhythms, and a relaxing atmosphere
+Bebop jazz featuring complex improvisations, rapid changes, and a focus on instrumental virtuosity

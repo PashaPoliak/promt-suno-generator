@@ -1,0 +1,50 @@
+
+Making music
+How to give custom prompts
+Custom Style Prompts for Suno
+When using suno prompts, Custom Mode offers greater control by splitting the suno prompts into two panels: a
+Lyric Generator
+and a
+Style of Music
+suno prompt. Each panel features a random generator and a text box for entering your own suno prompts.
+The
+Lyric Generator
+allows you to expand on your story idea, similar to Simple Mode when prompting Suno. It generates formatted lyrics that can be edited or expanded further. The Lyrics box accommodates 3000 characters.
+Style of music suno prompts
+The
+Style of Music
+prompt goes beyond just the genre when using suno prompts. It encompasses mood, sub-genre descriptions, instruments, and vocal tags. Your suno prompt can be simple or a comma-separated list, such as:
+EDM future bass, syncopated rhythms
+Upbeat House, Female vocal
+Jazzy Blues, sparse vocals, acoustic guitar, stomp
+Bittersweet Hindustani Electro-pop, melodic sarod, ornamental singing
+Exploring Genres with suno prompts
+Suno utilizes a
+Large Language Model
+to convert the Style Prompt into music. Words can be linked to time periods, cultures, specific song patterns, and emotions. Don’t limit yourself to conventional music genres when prompting Suno. Embrace the generative AI and explore!
+Frequently Asked Questions about Suno Prompts
+Q: How detailed should my suno prompts be?
+A: While suno prompts can be as simple as a genre name, more detailed prompts often yield more specific results. Aim for a balance between specificity and allowing room for AI creativity.
+Q: Can I use artist names in my suno prompts?
+A: No, you cannot reference artists in your suno prompts, but we have a large list of popular artists and what their style is.
+Artist inspired prompts
+Q: How do I create cohesive albums using suno prompts?
+A: To create a cohesive album, maintain consistent elements across your suno prompts. You might keep the genre consistent while varying moods, or maintain a thematic element while exploring different genres.
+Q: Can suno prompts incorporate specific musical techniques?
+A: Absolutely! Include musical techniques in your suno prompts, such as “Polyrhythmic percussion, modal jazz harmonies, with a climactic key change” to guide the AI towards specific musical structures.
+Q: How can I use suno prompts to create unique vocal styles?
+A: Experiment with descriptive language for vocals in your suno prompts. “Whispered verses with soaring, multi-layered choruses” or “Gravelly baritone with occasional falsetto breaks” can produce interesting vocal performances.
+Resources for suno prompts
+While there isn’t a definitive list of genres, here are some resources to help with prompting Suno:
+Prompt based on popular artists
+:
+Artist list
+Example electronic music prompts
+Electronic prompts
+Example pop music prompts
+Pop prompts
+Example rock music prompts
+Rock prompts
+Example hip hop music prompts
+Hip Hop prompts
+By understanding how to prompt Suno effectively in Custom Mode and utilizing these advanced techniques, you’ll unlock a world of creative possibilities beyond simple suno prompts. Remember, the key to great suno prompts is experimentation and iteration. Don’t be afraid to try unconventional combinations and refine your prompts based on the results you get. Happy music making with Suno!

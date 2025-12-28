@@ -1,0 +1,17 @@
+
+Making music
+Extending songs
+Extending songs with Suno AI Prompts
+Many people using Suno AI prompts face difficulties when extending songs multiple times. This often results in uneven lyrics, weaker vocal quality, and a drop in the overall sound quality.
+Solution: Apply effective strategies for extending songs with Suno AI prompts to ensure top-notch music production.
+Examples for Optimizing Suno Prompts:
+Try different versions of Suno prompts for each part of the song and choose the best:
+For example, extend verse 1 and chorus 1 with Suno prompts; then extend verse 2 and chorus 2; finally, extend verse 3, the bridge, chorus 3, and the end. Creating multiple versions of Suno prompt extensions allows you to catch and resolve issues early, leading to better song quality.
+Use AI feedback to fine-tune Suno prompts for lyrics and song structure before finalizing:
+If one version doesn’t work well, discard it and give the AI time to reset. This break can lead to improved results when you revise the Suno prompts.
+Limit the number of Suno prompt extensions to maintain sound quality:
+Keep the Suno AI extensions to a minimum, starting with the song and extending it only two or three times. This helps maintain the music’s quality and prevents it from becoming disjointed after too many extensions.
+Extra Tips for Improving Suno Prompts:
+Save any Suno prompt version that meets your standards by using the “get whole song” option, ensuring consistency in your track.
+Experiment with the length of different song sections and adjust EQ settings in your Suno prompts to fit your musical style.
+Engage with the Suno AI community to gather fresh ideas and refine your skills for creating better music with Suno prompts.

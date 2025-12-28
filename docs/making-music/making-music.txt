@@ -1,0 +1,47 @@
+
+Making music
+How to Structure Prompts for Suno AI
+Creating effective Suno prompts is crucial for generating high-quality music.
+Example:
+[Intro]
+*rain falling softly*
+[Verse 1]
+Walking through shadows,
+*whispers*
+ALL ALONE, yet the stars still shine bright
+[Chorus]
+WHISPER TO ME, tell me it's alright
+*thunder rumbles*
+DANCING IN THE DARK, hold on to the light
+[screaming vocals]
+Let the storm rage, we'll make it through the night
+Song structure
+1. Define the Song’s Structure:
+Use brackets to specify different sections of the song. Examples:
+[Intro]
+[Verse]
+[Chorus]
+[Bridge]
+Effects and dynamics
+2. Incorporate Effects and Dynamics:
+Utilize asterisks for sound effects and capitalization for emphasis:
+soft wind sounds
+ALL CAPS for emphasis
+Styles and genres
+3. Specify Styles and Genres:
+Refer to the
+suno prompt list
+to define the genre and style. Examples:
+[Jazz intro]
+[Rock verse]
+[Electronic beat]
+Voice Techniques
+4. Detail Vocal Techniques:
+Guide the AI on vocal styles using descriptive prompts:
+[Whispering vocals]
+[Screaming vocals]
+Emotions and themes
+5. Include Emotions and Themes:
+Use emotive language to convey the song’s mood:
+[Haunting melody]
+[Uplifting chorus]

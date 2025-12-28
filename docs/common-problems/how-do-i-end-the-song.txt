@@ -1,0 +1,27 @@
+
+Common problems
+How do I end the song?
+How do I end the song?
+These tips can help, but remember each generation is random. It’s better to pick a ‘good’ ending than to burn through credits hoping for a ‘perfect’ ending.
+Song Structure
+Songs generate clips with endings after a full verse and chorus cycle. It can also resist ending if it has more of the cycle left to complete.
+If the song ends abruptly within the 1st clip, you might need to structure the song with lyrics and metatags.
+Wrap up
+It can help to tell Suno to ‘wrap up’ the song in a final clip before trying to end it. Some known prompts and lyric tips:
+[Outro]
+[Refrain]
+[Finale]
+[Big Finish]
+End Tags
+These metatags might trigger the end of the song and stop the clip:
+[End]
+[Fade Out]
+[Fade Out and End]
+Use ‘end’ in the Style
+A more aggressive method is to clear the Style and Lyric prompts completely, and prompt for an end only.
+Clear the Style Prompt and replace it with the word ‘End’.
+Add an [End] tag to the Lyrics Prompt.
+Endless Loop
+Some genres might to settle into a loop that doesn’t progress, or an outro that never fades out. Trim the end of a clip, or create a manual fade-out with free audio editing software.
+Suno lyrics not working
+How do I make the song longer?
