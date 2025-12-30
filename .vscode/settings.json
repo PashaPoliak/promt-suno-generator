@@ -1,6 +1,10 @@
 {
   "python.testing.pytestArgs": [
-    "."
+    ".",
+    "-v",
+    "--cov=myproj/",
+    "--cov-report=xml",
+    "--pdb"
   ],
   "python.testing.unittestEnabled": false,
   "python.testing.pytestEnabled": true,
@@ -43,5 +47,9 @@
         ]
       }
     }
-  }
+  },
+  "python.analysis.extraPaths": [
+    "./app/models"
+  ],
+  "git.ignoreLimitWarning": true
 }
