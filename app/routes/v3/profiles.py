@@ -5,14 +5,27 @@ from config.logging_config import get_logger
 logger = get_logger(__name__)
 
 router = APIRouter()
-profile_dao = MongoProfileDAO()
-clip_dao = MongoClipDAO()
-playlist_dao = MongoPlaylistDAO()
+
+
+def get_profile_dao():
+    """Lazy initialization of profile DAO to avoid immediate MongoDB connection"""
+    return MongoProfileDAO()
+
+
+def get_clip_dao():
+    """Lazy initialization of clip DAO to avoid immediate MongoDB connection"""
+    return MongoClipDAO()
+
+
+def get_playlist_dao():
+    """Lazy initialization of playlist DAO to avoid immediate MongoDB connection"""
+    return MongoPlaylistDAO()
 
 
 @router.get("")
 async def get_profiles_v3():
     try:
+        profile_dao = get_profile_dao()
         profiles = await profile_dao.get_all_profiles()
         return profiles
     except Exception as e:
@@ -24,6 +37,7 @@ async def get_profiles_v3():
 async def get_profile_by_handle_v3(profile_handle: str):
     try:
         # Get the raw profile data with IDs
+        profile_dao = get_profile_dao()
         profile_data = await profile_dao.get_profile_by_handle(profile_handle)
         if not profile_data:
             raise HTTPException(status_code=404, detail=f"Profile '{profile_handle}' not found")
@@ -36,6 +50,7 @@ async def get_profile_by_handle_v3(profile_handle: str):
         clips = []
         for clip_id in clip_ids:
             try:
+                clip_dao = get_clip_dao()
                 clip_data = await clip_dao.get_clip_by_id(clip_id)
                 if clip_data:
                     # Create a simplified clip object with the required fields
@@ -54,12 +69,13 @@ async def get_profile_by_handle_v3(profile_handle: str):
                     clips.append(clip_obj)
             except Exception as clip_error:
                 logger.error(f"Error processing clip {clip_id}: {clip_error}")
-                continue  # Skip this clip if there's an error
+                continue # Skip this clip if there's an error
         
         # Get playlist objects by IDs
         playlists = []
         for playlist_id in playlist_ids:
             try:
+                playlist_dao = get_playlist_dao()
                 playlist_data = await playlist_dao.get_playlist_by_id(playlist_id)
                 if playlist_data:
                     # Create a simplified playlist object with the required fields

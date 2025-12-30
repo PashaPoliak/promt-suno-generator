@@ -3,7 +3,7 @@ import os
 from pathlib import Path
 
 def extract_ids_from_profiles():
-    profiles_dir = Path("backend/json/profiles")
+    profiles_dir = Path("app/json/profiles")
     playlist_ids = set()
     clip_ids = set()
     

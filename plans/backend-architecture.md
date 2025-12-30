@@ -55,7 +55,7 @@ This document outlines the Python-based backend architecture for the Suno Prompt
 ## Architecture Structure
 
 ```
-backend/
+/
 ├── app/
 │   ├── __init__.py
 │   ├── main.py                 # FastAPI application instance

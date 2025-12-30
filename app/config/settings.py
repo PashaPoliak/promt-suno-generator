@@ -1,5 +1,7 @@
 from pydantic_settings import BaseSettings
 import os
+from typing import Union
+from pydantic import field_validator
 
 
 class Settings(BaseSettings):
@@ -12,14 +14,23 @@ class Settings(BaseSettings):
     
     database_url: str = os.getenv("DATABASE_URL", "sqlite:///suno.db")
     postgres_url: str = os.getenv("POSTGRES_URL", "postgresql://user:password@localhost/suno_db")
-    mongodb_url: str = os.getenv("MONGODB_URL", "")
+    mongodb_url: str = os.getenv("MONGODB_URL", "mongodb://localhost:27017")
     mongodb_database: str = os.getenv("MONGODB_DATABASE", "suno_db")
     
     environment: str = os.getenv("ENVIRONMENT", "local")
-    debug: bool = os.getenv("DEBUG", "False").lower() == "true"
+    debug: Union[bool, str] = os.getenv("DEBUG", "False")
     
     log_level: str = os.getenv("LOG_LEVEL", "INFO")
     log_file: str = os.getenv("LOG_FILE", "app.log")
+    
+    @field_validator('debug', mode='before')
+    @classmethod
+    def validate_debug(cls, v) -> bool:
+        if isinstance(v, bool):
+            return v
+        if isinstance(v, str):
+            return v.lower() in ("true", "1", "yes", "on", "warn", "debug", "info")
+        return False
 
 
 settings = Settings()

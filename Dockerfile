@@ -15,7 +15,7 @@ RUN apt-get update \
     && rm -rf /var/lib/apt/lists/*
 
 # Copy project requirements
-COPY backend/requirements.txt .
+COPY app/requirements.txt .
 
 # Install Python dependencies
 RUN pip install --no-cache-dir -r requirements.txt
@@ -27,4 +27,4 @@ COPY . /app/
 EXPOSE $PORT 8000
 
 # Run the application
-CMD ["sh", "-c", "cd backend && python -m pytest tests/ -v && uvicorn main:app --host 0.0.0.0 --port $PORT"]
+CMD ["sh", "-c", "cd app && python -m pytest tests/ -v && uvicorn main:app --host 0.0.0.0 --port $PORT"]

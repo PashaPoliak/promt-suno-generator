@@ -244,7 +244,7 @@ Create a `.env` file in the backend directory with the following variables:
 docker-compose up --build
 ```
 ##CI/CD
-cd backend && python -m pytest tests/
+cd app && python -m pytest tests/
 
 cd frontend && npm start dev
 
@@ -317,7 +317,7 @@ pip install -r requirements.txt
 
 2. Run the application:
 ```bash
-cd backend
+cd app
 python -m uvicorn main:app --reload --host 0.0.0.0 --port 8000
 ```
 

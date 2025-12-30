@@ -11,10 +11,13 @@ services:
       - ENVIRONMENT=dev
       - DATABASE_URL=postgresql://user:password@db:5432/suno_db
       - POSTGRES_URL=postgresql://user:password@db:5432/suno_db
+      - MONGODB_URL=mongodb://mongo:27017
+      - MONGODB_DATABASE=suno_db
     depends_on:
       - db
+      - mongo
     volumes:
-      - ./backend:/app/backend
+      - ./app:/app/app
     restart: unless-stopped
 
   frontend:

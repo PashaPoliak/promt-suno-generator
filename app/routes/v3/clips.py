@@ -5,12 +5,17 @@ from config.logging_config import get_logger
 logger = get_logger(__name__)
 
 router = APIRouter()
-clip_dao = MongoClipDAO()
+
+
+def get_clip_dao():
+    """Lazy initialization of clip DAO to avoid immediate MongoDB connection"""
+    return MongoClipDAO()
 
 
 @router.get("")
 async def get_clips_v3():
     try:
+        clip_dao = get_clip_dao()
         clips = await clip_dao.get_all_clips()
         return clips
     except Exception as e:
@@ -21,6 +26,7 @@ async def get_clips_v3():
 @router.get("/{clip_id}")
 async def get_clip_by_id_v3(clip_id: str):
     try:
+        clip_dao = get_clip_dao()
         clip = await clip_dao.get_clip_by_id(clip_id)
         if not clip:
             raise HTTPException(status_code=404, detail=f"Clip {clip_id} not found")

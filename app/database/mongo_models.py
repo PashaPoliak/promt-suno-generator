@@ -1,6 +1,5 @@
 from pydantic import BaseModel
 from typing import Optional, List, Dict, Any
-from datetime import datetime
 
 
 class MongoClip(BaseModel):
@@ -45,7 +44,6 @@ class MongoClip(BaseModel):
     has_hook: Optional[bool] = None
     batch_index: Optional[int] = None
     is_pinned: Optional[bool] = None
-    created_at: datetime = datetime.utcnow()
 
 
 class MongoPlaylist(BaseModel):
@@ -73,7 +71,6 @@ class MongoPlaylist(BaseModel):
     is_discover_playlist: Optional[bool] = None
     next_cursor: Optional[str] = None
     clip_ids: List[str] = []
-    created_at: datetime = datetime.utcnow()
 
 
 class MongoProfile(BaseModel):
@@ -84,4 +81,3 @@ class MongoProfile(BaseModel):
     avatar_image_url: Optional[str] = None
     clip_ids: List[str] = []
     playlist_ids: List[str] = []
-    created_at: datetime = datetime.utcnow()
