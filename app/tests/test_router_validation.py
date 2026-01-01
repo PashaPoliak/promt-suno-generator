@@ -1,4 +1,3 @@
-
 import sys
 import os
 
@@ -6,7 +5,6 @@ sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '../..'))
 
 from main import create_app
-
 
 def test_app_creation():
     """Test that the application can be created successfully"""

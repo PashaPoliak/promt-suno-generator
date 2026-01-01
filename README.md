@@ -1,4 +1,5 @@
 # Suno Prompt Generator
+[![Python application](https://github.com/PashaPoliak/promt-suno-generator/actions/workflows/python-app.yml/badge.svg)](https://github.com/PashaPoliak/promt-suno-generator/actions/workflows/python-app.yml)
 
 ##[API]
 v1 - db

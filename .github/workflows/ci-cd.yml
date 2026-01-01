@@ -1,4 +1,4 @@
-name: CI/CD Pipeline
+name: Suno Pipeline
 
 on:
   push:
@@ -92,9 +92,3 @@ jobs:
       run: |
         cd app
         python -m pytest tests/ -v
-        
-    - name: Deploy to Render
-      env:
-        RENDER_DEPLOY_HOOK: ${{ secrets.RENDER_DEPLOY_HOOK }}
-      run: |
-        curl -X POST $RENDER_DEPLOY_HOOK
