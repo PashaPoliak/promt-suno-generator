@@ -1,22 +1,23 @@
-from fastapi import APIRouter, HTTPException
-from services.mongo_dao import MongoClipDAO
+from fastapi import APIRouter, HTTPException, Depends
+from sqlalchemy.orm import Session
+from app.services.postgres_dao import PostgresClipDAO
 from config.logging_config import get_logger
+from app.database.postgres_connection import get_db
 
 logger = get_logger(__name__)
 
 router = APIRouter()
 
 
-def get_clip_dao():
-    """Lazy initialization of clip DAO to avoid immediate MongoDB connection"""
-    return MongoClipDAO()
+def get_clip_dao(db: Session = Depends(get_db)):
+    return PostgresClipDAO(db)
 
 
 @router.get("")
-async def get_clips_v3():
+def get_clips_v3(db: Session = Depends(get_db)):
     try:
-        clip_dao = get_clip_dao()
-        clips = await clip_dao.get_all_clips()
+        clip_dao = PostgresClipDAO(db)
+        clips = clip_dao.get_all_clips()
         return clips
     except Exception as e:
         logger.error(f"Error retrieving clips: {e}")
@@ -24,10 +25,10 @@ async def get_clips_v3():
 
 
 @router.get("/{clip_id}")
-async def get_clip_by_id_v3(clip_id: str):
+def get_clip_by_id_v3(clip_id: str, db: Session = Depends(get_db)):
     try:
-        clip_dao = get_clip_dao()
-        clip = await clip_dao.get_clip_by_id(clip_id)
+        clip_dao = PostgresClipDAO(db)
+        clip = clip_dao.get_clip_by_id(clip_id)
         if not clip:
             raise HTTPException(status_code=404, detail=f"Clip {clip_id} not found")
         return clip

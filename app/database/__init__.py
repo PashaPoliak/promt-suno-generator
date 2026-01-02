@@ -1,4 +1,3 @@
-from .mongo_connection import mongodb
-from .mongo_models import MongoClip, MongoPlaylist, MongoProfile
+from .postgres_connection import engine, SessionLocal, Base
 
-__all__ = ["mongodb", "MongoClip", "MongoPlaylist", "MongoProfile"]
+__all__ = ["engine", "SessionLocal", "Base"]

@@ -1,4 +1,4 @@
-from sqlalchemy import JSON, Column, String, Integer, Boolean, DateTime, Text, ForeignKey, Table
+from sqlalchemy import JSON, Column, String, Integer, Boolean, DateTime, Text, ForeignKey, Table, UUID
 from sqlalchemy.orm import declarative_base, relationship
 
 
@@ -56,7 +56,7 @@ class Clip(Base):
     video_is_stale = Column(Boolean)
     uses_latest_model = Column(Boolean)
     is_liked = Column(Boolean)
-    user_id = Column(String)
+    user_id = Column(UUID(as_uuid=True))
     display_name = Column(String)
     handle = Column(String)
     is_handle_updated = Column(Boolean)
@@ -120,7 +120,7 @@ class Tag(Base):
     
 class User(Base):
     __tablename__ = "users"
-    id = Column(String(36), primary_key=True)
+    id = Column(UUID(as_uuid=True), primary_key=True)
     username = Column(String, unique=True)
     created_at = Column(DateTime)
     updated_at = Column(DateTime)

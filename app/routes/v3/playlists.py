@@ -1,5 +1,4 @@
 from fastapi import APIRouter, HTTPException
-from services.mongo_dao import MongoPlaylistDAO
 from config.logging_config import get_logger
 
 logger = get_logger(__name__)
@@ -8,8 +7,7 @@ router = APIRouter()
 
 
 def get_playlist_dao():
-    """Lazy initialization of playlist DAO to avoid immediate MongoDB connection"""
-    return MongoPlaylistDAO()
+    return PostgresPlaylistDAO()
 
 
 @router.get("")

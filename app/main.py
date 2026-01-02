@@ -1,6 +1,7 @@
 import sys
 import os
 import argparse
+from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
@@ -9,11 +10,16 @@ sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
 from routes.v1 import router as api_router
 from routes.v2 import router as api_v2_router
 from routes.v3 import clips_router as v3_clips_router, playlists_router as v3_playlists_router, profiles_router as v3_profiles_router
-from database.mongo_connection import mongodb
+from config.init_db import init_db, engine
 
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    init_db()
+    yield
 
 def create_app():
-    app = FastAPI(title="Suno Prompt Generator API", version="1.0.0")
+    app = FastAPI(title="Suno Prompt Generator API", version="1.0.0", lifespan=lifespan)
     
     app.add_middleware(
         CORSMiddleware,
