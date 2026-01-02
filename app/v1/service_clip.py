@@ -15,7 +15,15 @@ class ClipService:
         self.db = db
 
     def get_clip_by_id(self, clip_id: str) -> Optional[ClipDTO]:
-        clip = self.db.query(Clip).filter(Clip.id == clip_id).first()
+        try:
+            # Try to convert string ID to UUID for the query
+            import uuid
+            uuid_id = uuid.UUID(clip_id) if isinstance(clip_id, str) and clip_id else clip_id
+            clip = self.db.query(Clip).filter(Clip.id == uuid_id).first()
+        except (ValueError, AttributeError):
+            # If conversion fails, try with the original string
+            clip = self.db.query(Clip).filter(Clip.id == clip_id).first()
+        
         if not clip:
             try:
                 clip_data = fetch_clip_from_suno(clip_id)
@@ -27,7 +35,19 @@ class ClipService:
         return to_clip_dto(clip)
 
     def save_clip(self, data: dict):
-        clip = self.db.query(Clip).filter(Clip.id == data["id"]).first()
+        try:
+            # Try to convert string ID to UUID for the query
+            import uuid
+            clip_id = data["id"]
+            if isinstance(clip_id, str):
+                uuid_id = uuid.UUID(clip_id)
+                clip = self.db.query(Clip).filter(Clip.id == uuid_id).first()
+            else:
+                clip = self.db.query(Clip).filter(Clip.id == clip_id).first()
+        except (ValueError, TypeError):
+            # If conversion fails, try with the original value
+            clip = self.db.query(Clip).filter(Clip.id == data["id"]).first()
+        
         if not clip:
             self.db.add(create_clip_slim(data))
             self.db.commit()

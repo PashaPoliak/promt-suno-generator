@@ -38,9 +38,9 @@ class TagService:
     @staticmethod
     async def create_tag(db: Session, tag_create: TagCreate) -> TagResponse:
         db_tag = Tag(
-            name=tag_create.name,  # type: ignore
-            description=tag_create.description,  # type: ignore
-            tag_type=tag_create.tag_type  # type: ignore
+            name=tag_create.name,
+            description=tag_create.description,
+            tag_type=tag_create.tag_type
         )
         
         db.add(db_tag)
@@ -55,10 +55,9 @@ class TagService:
         if not db_tag:
             return None
         
-        # Update fields
-        db_tag.name = tag_update.name  # type: ignore
-        db_tag.description = tag_update.description  # type: ignore
-        db_tag.tag_type = tag_update.tag_type  # type: ignore
+        db_tag.name = tag_update.name
+        db_tag.description = tag_update.description
+        db_tag.tag_type = tag_update.tag_type
         
         db.commit()
         db.refresh(db_tag)

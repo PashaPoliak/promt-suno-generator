@@ -1,13 +1,13 @@
 from fastapi import APIRouter, HTTPException, Query, Depends
 from sqlalchemy.orm import Session
 from typing import List, Optional
+from config.session import get_db_sqlite
 
 from models import (
     TagResponse,
     TagCreate
 )
-from services.tag_service import TagService
-from config.session import get_db
+from app.v1.service_tag import TagService
 
 router = APIRouter()
 
@@ -18,7 +18,7 @@ async def get_tags(
     limit: int = Query(100, ge=1, le=1000),
     tag_type: Optional[str] = Query(None),
     name: Optional[str] = Query(None),
-    db: Session = Depends(get_db)
+    db: Session = Depends(get_db_sqlite)
 ):
     return await TagService.get_tags(
         db,
@@ -32,7 +32,7 @@ async def get_tags(
 @router.get("/{tag_id}", response_model=TagResponse)
 async def get_tag(
     tag_id: str,
-    db: Session = Depends(get_db)
+    db: Session = Depends(get_db_sqlite)
 ):
     """Get a specific tag by ID"""
     tag = await TagService.get_tag(db, tag_id)
@@ -44,9 +44,8 @@ async def get_tag(
 @router.post("/", response_model=TagResponse)
 async def create_tag(
     tag: TagCreate,
-    db: Session = Depends(get_db)
+    db: Session = Depends(get_db_sqlite)
 ):
-    """Create a new tag"""
     return await TagService.create_tag(db, tag)
 
 
@@ -54,9 +53,8 @@ async def create_tag(
 async def update_tag(
     tag_id: str,
     tag: TagCreate,
-    db: Session = Depends(get_db)
+    db: Session = Depends(get_db_sqlite)
 ):
-    """Update an existing tag"""
     updated_tag = await TagService.update_tag(db, tag_id, tag)
     if not updated_tag:
         raise HTTPException(status_code=404, detail="Tag not found")
@@ -66,7 +64,7 @@ async def update_tag(
 @router.delete("/{tag_id}")
 async def delete_tag(
     tag_id: str,
-    db: Session = Depends(get_db)
+    db: Session = Depends(get_db_sqlite)
 ):
     """Delete a tag"""
     success = await TagService.delete_tag(db, tag_id)
@@ -79,7 +77,6 @@ async def delete_tag(
 async def search_tags(
     name: str = Query(..., min_length=1),
     tag_type: Optional[str] = Query(None),
-    db: Session = Depends(get_db)
+    db: Session = Depends(get_db_sqlite)
 ):
-    """Search tags by name and optional type"""
     return await TagService.search_tags(db, name, tag_type)

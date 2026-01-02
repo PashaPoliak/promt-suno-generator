@@ -10,8 +10,7 @@ def setup_logging():
         root_logger.removeHandler(handler)
     
     simple_formatter = logging.Formatter(
-        '%(asctime)s | %(levelname)s | %(message)s',
-        datefmt='%Y-%m-%d %H:%M:%S'
+        '%(levelname)s:    %(message)s'
     )
     
     console_handler = logging.StreamHandler(sys.stdout)

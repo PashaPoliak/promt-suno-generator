@@ -7,14 +7,14 @@ Base = declarative_base()
 
 playlist_clips = Table(
     "playlist_clips", Base.metadata,
-    Column("playlist_id", String, ForeignKey("playlists.id"), primary_key=True),
-    Column("clip_id", String, ForeignKey("clips.id"), primary_key=True),
+    Column("playlist_id", UUID(as_uuid=True), ForeignKey("playlists.id"), primary_key=True),
+    Column("clip_id", UUID(as_uuid=True), ForeignKey("clips.id"), primary_key=True),
 )
 
 
 class Profile(Base):
     __tablename__ = "profiles"
-    id = Column(String(36), primary_key=True)
+    id = Column(UUID(as_uuid=True), primary_key=True)
     handle = Column(String, unique=True)
     display_name = Column(String)
     profile_description = Column(Text)
@@ -25,8 +25,8 @@ class Profile(Base):
 
 class Clip(Base):
     __tablename__ = "clips"
-    id = Column(String(36), primary_key=True)
-    profile_id = Column(String, ForeignKey("profiles.id"))
+    id = Column(UUID(as_uuid=True), primary_key=True)
+    profile_id = Column(UUID(as_uuid=True), ForeignKey("profiles.id"))
     title = Column(String)
     status = Column(String)
     play_count = Column(Integer)
@@ -74,8 +74,8 @@ class Clip(Base):
 
 class Playlist(Base):
     __tablename__ = "playlists"
-    id = Column(String(36), primary_key=True)
-    profile_id = Column(String, ForeignKey("profiles.id"))
+    id = Column(UUID(as_uuid=True), primary_key=True)
+    profile_id = Column(UUID(as_uuid=True), ForeignKey("profiles.id"))
     name = Column(String)
     description = Column(Text)
     image_url = Column(String)
@@ -83,6 +83,7 @@ class Playlist(Base):
     play_count = Column(Integer)
     song_count = Column(Integer)
     is_public = Column(Boolean)
+    handle = Column(String)
     profile = relationship("Profile", back_populates="playlists")
     clips = relationship("Clip", secondary=playlist_clips, back_populates="playlists")
     entity_type = Column(String)
@@ -103,7 +104,7 @@ class Playlist(Base):
 
 class Category(Base):
     __tablename__ = "categories"
-    id = Column(String(36), primary_key=True)
+    id = Column(UUID(as_uuid=True), primary_key=True)
     name = Column(String, nullable=False)
     description = Column(Text)
     created_at = Column(DateTime)
@@ -111,7 +112,7 @@ class Category(Base):
     
 class Tag(Base):
     __tablename__ = "tags"
-    id = Column(String(36), primary_key=True)
+    id = Column(UUID(as_uuid=True), primary_key=True)
     name = Column(String, nullable=False)
     description = Column(Text)
     tag_type = Column(String)
@@ -128,7 +129,7 @@ class User(Base):
     
 class PromptTemplate(Base):
     __tablename__ = "prompt_templates"
-    id = Column(String(36), primary_key=True)
+    id = Column(UUID(as_uuid=True), primary_key=True)
     name = Column(String, nullable=False)
     description = Column(Text)
     genre = Column(String)
@@ -140,39 +141,41 @@ class PromptTemplate(Base):
     is_active = Column(Boolean, default=True)
     created_at = Column(DateTime)
     updated_at = Column(DateTime)
-    category_id = Column(String, ForeignKey("categories.id"))
+    category_id = Column(UUID(as_uuid=True), ForeignKey("categories.id"))
     
     
 class GeneratedPrompt(Base):
     __tablename__ = "generated_prompts"
-    id = Column(String(36), primary_key=True)
+    id = Column(UUID(as_uuid=True), primary_key=True)
     prompt_text = Column(Text, nullable=False)
     parameters = Column(JSON)
     is_favorite = Column(Boolean, default=False)
     generation_result = Column(JSON)
     created_at = Column(DateTime)
-    user_id = Column(String, ForeignKey("users.id"))
+    user_id = Column(UUID(as_uuid=True), ForeignKey("users.id"))
     
     
 class FavoritePrompt(Base):
     __tablename__ = "favorite_prompts"
-    id = Column(String(36), primary_key=True)
-    user_id = Column(String, ForeignKey("users.id"), nullable=False)
-    prompt_id = Column(String, ForeignKey("generated_prompts.id"), nullable=False)
+    id = Column(UUID(as_uuid=True), primary_key=True)
+    user_id = Column(UUID(as_uuid=True), ForeignKey("users.id"), nullable=False)
+    prompt_id = Column(UUID(as_uuid=True), ForeignKey("generated_prompts.id"), nullable=False)
     created_at = Column(DateTime)
     
     
 class PromptTemplateTag(Base):
     __tablename__ = "prompt_template_tags"
     id = Column(String(36), primary_key=True)
-    template_id = Column(String, ForeignKey("prompt_templates.id"))
-    tag_id = Column(String, ForeignKey("tags.id"))
+    template_id = Column(UUID(as_uuid=True), ForeignKey("prompt_templates.id"))
+    tag_id = Column(UUID(as_uuid=True), ForeignKey("tags.id"))
     created_at = Column(DateTime)
 
 
 class PlaylistClip(Base):
     __tablename__ = "playlist_clips_entity"
     id = Column(String(36), primary_key=True)
-    playlist_id = Column(String, ForeignKey("playlists.id"))
-    clip_id = Column(String, ForeignKey("clips.id"))
+    playlist_id = Column(UUID(as_uuid=True), ForeignKey("playlists.id"))
+    clip_id = Column(UUID(as_uuid=True), ForeignKey("clips.id"))
     relative_index = Column(Integer)
+
+

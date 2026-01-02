@@ -2,10 +2,10 @@ from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 from typing import List
 
+from app.v1.service_clip import ClipService
 from services.api import fetch_clip_from_suno
-from services.clip_service import ClipService
 from services.mappers import to_clip_dto
-from config.session import get_db
+from config.session import get_db_sqlite
 from models.clip import ClipDTO
 from models.entities import Clip
 
@@ -20,7 +20,7 @@ router = APIRouter()
 def get_clips(
     page: int = 0,
     size: int = 25,
-    db: Session = Depends(get_db)
+    db: Session = Depends(get_db_sqlite)
 ):
     logger.info(f"Fetching clips with page={page}, size={size}")
     clips = db.query(Clip).offset(page).limit(size).all()
@@ -30,7 +30,7 @@ def get_clips(
 
 
 @router.get("/{clip_id}", response_model=ClipDTO, response_model_exclude_none=True)
-def get_clip(clip_id: str, db: Session = Depends(get_db)):
+def get_clip(clip_id: str, db: Session = Depends(get_db_sqlite)):
     clip_service = ClipService(db)
     fetch_clip_from_suno(clip_id)
     clip = clip_service.get_clip_by_id(clip_id)
@@ -41,7 +41,7 @@ def get_clip(clip_id: str, db: Session = Depends(get_db)):
 
 
 @router.delete("/{clip_id}")
-def delete_clip(clip_id: str, db: Session = Depends(get_db)):
+def delete_clip(clip_id: str, db: Session = Depends(get_db_sqlite)):
     clip = db.query(Clip).filter(Clip.id == clip_id).first()
     if not clip:
         raise HTTPException(status_code=404, detail="Clip not found")

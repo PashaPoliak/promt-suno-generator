@@ -1,5 +1,6 @@
 import sys
 import os
+import uvicorn
 import argparse
 from contextlib import asynccontextmanager
 from fastapi import FastAPI
@@ -7,19 +8,21 @@ from fastapi.middleware.cors import CORSMiddleware
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
 
-from routes.v1 import router as api_router
-from routes.v2 import router as api_v2_router
-from routes.v3 import clips_router as v3_clips_router, playlists_router as v3_playlists_router, profiles_router as v3_profiles_router
-from config.init_db import init_db, engine
+from app.v1 import router as api_router
+from app.v2 import router as api_v2_router
+from app.v3 import router as api_v3_router
+from app.config.init_db import init_db
+from app.config.session import engine_embed, engine_postgres
 
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    init_db()
+    init_db(engine_embed)
+    init_db(engine_postgres)
     yield
 
 def create_app():
-    app = FastAPI(title="Suno Prompt Generator API", version="1.0.0", lifespan=lifespan)
+    app = FastAPI(title="Suno Prompt Generator API", version="1.0", lifespan=lifespan)
     
     app.add_middleware(
         CORSMiddleware,
@@ -31,9 +34,7 @@ def create_app():
     
     app.include_router(api_router, prefix="/api/v1")
     app.include_router(api_v2_router, prefix="/api/v2")
-    app.include_router(v3_clips_router, prefix="/api/v3/clips")
-    app.include_router(v3_playlists_router, prefix="/api/v3/playlists")
-    app.include_router(v3_profiles_router, prefix="/api/v3/profiles")
+    app.include_router(api_v3_router, prefix="/api/v3")
 
     return app
 
@@ -48,6 +49,4 @@ if __name__ == "__main__":
     args = parser.parse_args()
     
     if args.start_server:
-        import uvicorn
-        app = create_app()
         uvicorn.run(app, host=args.host, port=args.port)

@@ -2,13 +2,26 @@
 [![Python application](https://github.com/PashaPoliak/promt-suno-generator/actions/workflows/python-app.yml/badge.svg)](https://github.com/PashaPoliak/promt-suno-generator/actions/workflows/python-app.yml)
 
 ##[API]
-v1 - db
+v1 - sqlite
 v2 - json
+v3 - pg
 
 cd ./app && python -m uvicorn main:app --host 127.0.0.1 --port 8000 --reload
 taskkill /f /im python.exe
 taskkill /f /im node.exe
 py -m pytest tests/ -v
+./test_api.sh
+
+DONT USE COMMENTS AND LOGGER
+your changes break v1
+run 
+cd ./app && python -m uvicorn main:app --host 127.0.0.1 --port 8000 --reload
+
+check ./test_api.sh
+
+fix errors
+v1 -sqlite, v3 -pg
+must be work both db
 
 
 

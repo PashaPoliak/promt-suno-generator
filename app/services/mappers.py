@@ -3,7 +3,7 @@ from typing import Optional, Any
 
 from models.profile import ProfileDTO
 from models.clip import ClipSlimDTO, ClipDTO, MetadataDTO, ClipBaseDTO
-from models.playlist import PlaylistDTO, PlaylistEntity
+from models.playlist import PlaylistDTO
 from models.entities import Profile, Clip, Playlist
 from config.logging_config import get_logger
 
@@ -60,7 +60,16 @@ def safe_get_attr(obj: Any, attr: str, default: Any = None) -> Any:
 
 def process_clip_metadata(metadata_dict: dict) -> dict:
     if not isinstance(metadata_dict, dict):
-        return metadata_dict
+        # If it's a string, try to parse it as JSON
+        if isinstance(metadata_dict, str):
+            import json
+            try:
+                metadata_dict = json.loads(metadata_dict)
+            except (json.JSONDecodeError, TypeError):
+                # If parsing fails, return an empty dict
+                return {}
+        else:
+            return {}
     
     processed_metadata = metadata_dict.copy()
     
@@ -71,6 +80,17 @@ def process_clip_metadata(metadata_dict: dict) -> dict:
 
 
 def create_metadata_dto(metadata_dict: dict) -> MetadataDTO:
+    # Handle case where metadata_dict might be a string
+    if isinstance(metadata_dict, str):
+        import json
+        try:
+            metadata_dict = json.loads(metadata_dict)
+        except (json.JSONDecodeError, TypeError):
+            metadata_dict = {}
+    
+    if not isinstance(metadata_dict, dict):
+        metadata_dict = {}
+    
     duration_value = metadata_dict.get('duration')
     duration_str = str(duration_value) if duration_value is not None else None
     return MetadataDTO(
@@ -81,28 +101,37 @@ def create_metadata_dto(metadata_dict: dict) -> MetadataDTO:
 
 
 def create_clips_dto_from_profile(profile: Profile):
-    return [ClipSlimDTO(
-        id=safe_str_convert(clip.id, ""),
-        title=safe_str_convert(clip.title, ""),
-        audio_url=safe_str_optional(clip.audio_url, None),
-        video_url=safe_str_optional(clip.video_url, None),
-        image_url=safe_str_optional(clip.image_url, None),
-        metadata=create_metadata_dto(getattr(clip, 'clip_metadata', {}))
-    ) for clip in profile.clips]
+    clips = getattr(profile, 'clips', [])
+    result = []
+    for clip in clips:
+        metadata = getattr(clip, 'clip_metadata', {})
+        result.append(ClipSlimDTO(
+            id=safe_str_convert(clip.id, ""),
+            title=safe_str_convert(clip.title, ""),
+            audio_url=safe_str_optional(clip.audio_url, None),
+            video_url=safe_str_optional(clip.video_url, None),
+            image_url=safe_str_optional(clip.image_url, None),
+            metadata=create_metadata_dto(metadata)
+        ))
+    return result
 
 
 def create_clips_dto_from_playlist(clips):
-    return [ClipSlimDTO(
-        id=safe_str_convert(clip.id, ""),
-        title=safe_str_convert(clip.title, ""),
-        audio_url=safe_str_optional(clip.audio_url, None),
-        video_url=safe_str_optional(clip.video_url, None),
-        image_url=safe_str_optional(clip.image_url, None),
-        metadata=create_metadata_dto(getattr(clip, 'clip_metadata', {}))
-    ) for clip in clips]
+    result = []
+    for clip in clips:
+        metadata = getattr(clip, 'clip_metadata', {})
+        result.append(ClipSlimDTO(
+            id=safe_str_convert(clip.id, ""),
+            title=safe_str_convert(clip.title, ""),
+            audio_url=safe_str_optional(clip.audio_url, None),
+            video_url=safe_str_optional(clip.video_url, None),
+            image_url=safe_str_optional(clip.image_url, None),
+            metadata=create_metadata_dto(metadata)
+        ))
+    return result
 
 
-def create_base_clips_dto(clips):
+def create_base_clips_dto(clips: Clip):
     return [
         ClipBaseDTO(
             id=safe_str_convert(clip.id, ""),
@@ -112,12 +141,22 @@ def create_base_clips_dto(clips):
         ) for clip in clips
     ]
 
-
 def create_playlist_dto(profile: Profile):
-    return [to_playlist_dto(playlist, profile.clips) for playlist in profile.playlists]
+    playlists = getattr(profile, 'playlists', []) or []
+    clips = getattr(profile, 'clips', [])
+    result = []
+    for playlist in playlists:
+        try:
+            result.append(to_playlist_dto(playlist, clips))
+        except Exception as e:
+            from config.logging_config import get_logger
+            logger = get_logger(__name__)
+            logger.error(f"Error creating playlist DTO for playlist {playlist.id}: {e}")
+            continue  # Skip this playlist and continue with others
+    return result
 
-def to_playlist(playlist: Playlist) -> PlaylistEntity:
-    return PlaylistEntity(
+def to_playlist(playlist: Playlist) -> PlaylistDTO:
+    return PlaylistDTO(
         id=safe_str_convert(playlist.id, ""),
         name=safe_str_convert(playlist.name, ""),
         handle=safe_str_convert(getattr(playlist, 'user_handle', ''), ""),
@@ -127,25 +166,61 @@ def to_playlist(playlist: Playlist) -> PlaylistEntity:
     )
 
 def to_playlist_dto(playlist: Playlist, clips) -> PlaylistDTO:
-    return PlaylistDTO(
-        id=safe_str_convert(playlist.id, ""),
-        name=safe_str_convert(playlist.name, ""),
-        handle=safe_str_convert(getattr(playlist.profile, 'handle', ''), "") if playlist.profile else "",
-        description=safe_str_optional(playlist.description, None),
-        image_url=safe_str_optional(playlist.image_url, None),
-        clips=create_base_clips_dto(clips)
-    )
+    try:
+        # Get clips that belong to this specific playlist
+        playlist_clips = [clip for clip in clips if clip in playlist.clips]
+        return PlaylistDTO(
+            id=safe_str_convert(playlist.id, ""),
+            name=safe_str_convert(playlist.name, ""),
+            handle=safe_str_convert(getattr(playlist.profile, 'handle', ''), "") if playlist.profile else "",
+            description=safe_str_optional(playlist.description, None),
+            image_url=safe_str_optional(playlist.image_url, None),
+            clips=create_clips_dto_from_playlist(playlist_clips)
+        )
+    except Exception as e:
+        from config.logging_config import get_logger
+        logger = get_logger(__name__)
+        logger.error(f"Error in to_playlist_dto: {e}")
+        # Re-raise with more context
+        raise
 
 def to_profile_dto(profile: Profile) -> ProfileDTO:
-    return ProfileDTO(
-        id=safe_str_convert(profile.id, ""),
-        handle=safe_str_convert(profile.handle, ""),
-        display_name=safe_str_convert(profile.display_name, ""),
-        profile_description=safe_str_optional(profile.profile_description, None),
-        avatar_image_url=safe_str_optional(profile.avatar_image_url, None),
-        clips=create_clips_dto_from_profile(profile),
-        playlists=create_playlist_dto(profile)
-    )
+    try:
+        return ProfileDTO(
+            id=safe_str_convert(profile.id, ""),
+            handle=safe_str_convert(profile.handle, ""),
+            display_name=safe_str_convert(profile.display_name, ""),
+            profile_description=safe_str_optional(profile.profile_description, None),
+            avatar_image_url=safe_str_optional(profile.avatar_image_url, None),
+            clips=create_clips_dto_from_profile(profile),
+            playlists=create_playlist_dto(profile)
+        )
+    except Exception as e:
+        from config.logging_config import get_logger
+        logger = get_logger(__name__)
+        logger.error(f"Error in to_profile_dto: {e}")
+        # Re-raise with more context
+        raise
+
+
+def create_playlist_dto_for_profile(profile: Profile):
+    playlists = getattr(profile, 'playlists', []) or []
+    all_clips = getattr(profile, 'clips', []) or []
+    
+    playlist_dtos = []
+    for playlist in playlists:
+        # Get clips that belong to this specific playlist
+        playlist_clips = [clip for clip in all_clips if clip in playlist.clips]
+        playlist_dtos.append(PlaylistDTO(
+            id=safe_str_convert(playlist.id, ""),
+            name=safe_str_convert(playlist.name, ""),
+            handle=safe_str_convert(getattr(playlist, 'user_handle', ''), ""),
+            description=safe_str_optional(playlist.description, None),
+            image_url=safe_str_optional(playlist.image_url, None),
+            clips=create_clips_dto_from_playlist(playlist_clips)
+        ))
+    
+    return playlist_dtos
 
 
 def to_clip_dto(clip: Clip) -> ClipDTO:
@@ -161,7 +236,7 @@ def to_clip_dto(clip: Clip) -> ClipDTO:
         type=safe_get_attr(clip, 'type', None),
         duration=safe_get_attr(clip, 'duration', None),
         task=safe_get_attr(clip, 'task', None),
-        user_id=safe_get_attr(clip, 'user_id', None),
+        user_id=safe_str_optional(safe_get_attr(clip, 'user_id', None), None),
         display_name=safe_get_attr(clip, 'display_name', None),
         handle=safe_get_attr(clip, 'handle', None),
         user_avatar_image_url=safe_get_attr(clip, 'avatar_image_url', None),
@@ -169,8 +244,26 @@ def to_clip_dto(clip: Clip) -> ClipDTO:
 
 
 def create_clip_slim(data: dict) -> Clip:
+    # Convert string IDs to UUID if possible
+    import uuid
+    clip_id = data["id"]
+    if isinstance(clip_id, str):
+        try:
+            clip_id = uuid.UUID(clip_id)
+        except ValueError:
+            # If it's not a valid UUID string, keep it as is
+            pass
+    
+    user_id = data.get("user_id")
+    if user_id and isinstance(user_id, str):
+        try:
+            user_id = uuid.UUID(user_id)
+        except ValueError:
+            # If it's not a valid UUID string, keep it as is
+            pass
+    
     return Clip(
-        id=data["id"],
+        id=clip_id,
         status=data.get("status"),
         title=data.get("title"),
         play_count=data.get("play_count", 0),
@@ -197,13 +290,13 @@ def create_clip_slim(data: dict) -> Clip:
         video_is_stale=data.get("video_is_stale"),
         uses_latest_model=data.get("uses_latest_model"),
         is_liked=data.get("is_liked"),
-        user_id=data.get("user_id"),
+        user_id=user_id,
         display_name=data.get("display_name"),
         handle=data.get("handle"),
         is_handle_updated=data.get("is_handle_updated"),
         avatar_image_url=data.get("avatar_image_url"),
         is_trashed=data.get("is_trashed"),
-        created_at=datetime.fromisoformat(data["created_at"].replace("Z", "+00:00")),
+        created_at=datetime.fromisoformat(data["created_at"].replace("Z", "+00:00")) if data.get("created_at") else None,
         is_public=data.get("is_public"),
         explicit=data.get("explicit"),
         comment_count=data.get("comment_count"),
