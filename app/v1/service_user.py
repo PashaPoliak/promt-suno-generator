@@ -1,7 +1,7 @@
 from fastapi import Depends
 from typing import List
 
-from app.config.session import get_db_sqlite
+from config.session import get_db_sqlite
 from models.profile import UserDTO
 from models.entities import Profile
 from config.logging_config import get_logger
@@ -11,7 +11,7 @@ logger = get_logger(__name__)
 
 class UserService:
     def get_all_users(self) -> List[UserDTO]:
-        from app.config.session import SessionLocal
+        from config.session import SessionLocal
         db = SessionLocal()
         try:
             profiles = db.query(Profile).all()

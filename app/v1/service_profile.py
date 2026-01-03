@@ -1,10 +1,10 @@
 from typing import List, Optional
-from app.config.session import get_db_sqlite
-from app.v1.dao_sqlite import ProfileDao
-from app.models.profile import ProfileDTO
-from app.services.api import fetch_profile_from_suno
-from app.config.logging_config import get_logger
-from app.services.mappers import to_profile_dto
+from config.session import get_db_sqlite
+from v1.dao_sqlite import ProfileDao
+from models.profile import ProfileDTO
+from services.api import fetch_profile_from_suno
+from config.logging_config import get_logger
+from services.mappers import to_profile_dto
 
 
 logger = get_logger(__name__)

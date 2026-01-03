@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends
 from typing import List
 
 from models.profile import UserDTO
-from app.v1.service_user import UserService
+from v1.service_user import UserService
 
 router = APIRouter()
 

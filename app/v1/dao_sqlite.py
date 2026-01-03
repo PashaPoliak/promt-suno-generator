@@ -1,7 +1,7 @@
 from typing import List
 from fastapi import Depends, HTTPException
-from app.config.session import get_db_sqlite
-from app.services.mappers import to_playlist
+from config.session import get_db_sqlite
+from services.mappers import to_playlist
 from models.entities import Profile, Clip, Playlist
 from sqlalchemy.orm import joinedload
 from config.logging_config import get_logger

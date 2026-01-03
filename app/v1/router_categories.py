@@ -2,7 +2,7 @@ from fastapi import APIRouter, HTTPException, Query, Depends
 from typing import List, Optional
 
 from models import (CategoryResponse, CategoryCreate)
-from app.v1.service_category import CategoryService
+from v1.service_category import CategoryService
 
 router = APIRouter()
 

@@ -22,7 +22,7 @@ ENDPOINTS=(
 
     # V2 Playlist endpoints
     "http://localhost:8000/api/v2/playlists"
-    "http://localhost:8000/api/v2/playlists/574c5144-2eb5-44e1-933-3add06c84006"
+    "http://localhost:8000/api/v2/playlists/574c5144-2eb5-44e1-9333-3add06c84006"
     "http://localhost:8000/api/v2/playlists/7ec624f7-9a8d-4a9c-84a6-33132901e1cc"
     
     # V2 Clip endpoints

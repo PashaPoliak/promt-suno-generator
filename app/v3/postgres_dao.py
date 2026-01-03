@@ -1,36 +1,24 @@
-from fastapi import Depends
+from fastapi import HTTPException
 from sqlalchemy.orm import joinedload
 from typing import List
 import uuid
+from config.logging_config import get_logger
+from models.entities import *
+from config.session import SessionPG
 
-from app.config.session import SessionPG
-from app.models.entities import *
+logger = get_logger(__name__)
 
 
 class PostgresClipDAO:
     def _get_db_session(self):
-        from app.config.session import SessionPG
-        if SessionPG is None:
-            return None
         try:
-            session = SessionPG()
-            if session is None:
-                return None
-            return session
+            return SessionPG()
         except Exception as e:
-            from config.logging_config import get_logger
-            logger = get_logger(__name__)
-            logger.error(f"Failed to create PostgreSQL session: {e}")
-            return None
+            raise HTTPException(status_code=503, detail="PostgreSQL service unavailable")
 
     def create_clip(self, clip_data: dict):
         db = self._get_db_session()
-        if not db:
-            from config.logging_config import get_logger
-            logger = get_logger(__name__)
-            logger.warning("PostgreSQL unavailable, skipping clip creation")
-            return None
-            
+
         try:
             clip = Clip(
                 id=clip_data.get("id", str(uuid.uuid4())),
@@ -54,67 +42,37 @@ class PostgresClipDAO:
             db.refresh(clip)
             return clip
         except Exception as e:
-            from config.logging_config import get_logger
-            logger = get_logger(__name__)
-            logger.error(f"Error creating clip: {e}")
-            return None
+            raise HTTPException(status_code=400, detail=f"Error getting clips: {e}")
         finally:
             if db:
                 db.close()
 
-    def get_clip_by_id(self, clip_id: str):
-        db = self._get_db_session()
-        if not db:
-            from config.logging_config import get_logger
-            logger = get_logger(__name__)
-            logger.warning("PostgreSQL unavailable, returning None")
-            return None
-            
+    def get_clip_by_id(self, clip_id: str) -> Clip:
+        db = self._get_db_session()            
         try:
             return db.query(Clip).filter(Clip.id == clip_id).first()
         except Exception as e:
-            from config.logging_config import get_logger
-            logger = get_logger(__name__)
-            logger.error(f"Error getting clip by ID: {e}")
-            return None
+            raise HTTPException(status_code=400, detail=f"Error getting clips: {e}")
         finally:
             if db:
                 db.close()
 
     def get_clips_by_user_id(self, user_id: str) -> List[Clip]:
         db = self._get_db_session()
-        if not db:
-            from config.logging_config import get_logger
-            logger = get_logger(__name__)
-            logger.warning("PostgreSQL unavailable, returning empty list")
-            return []
-            
         try:
             return db.query(Clip).filter(Clip.user_id == user_id).all()
         except Exception as e:
-            from config.logging_config import get_logger
-            logger = get_logger(__name__)
-            logger.error(f"Error getting clips by user ID: {e}")
-            return []
+            raise HTTPException(status_code=400, detail=f"Error getting clips: {e}")
         finally:
             if db:
                 db.close()
 
-    def get_all_clips(self, skip: int = 0, limit: int = 25) -> List[Clip]:
+    def get_all_clips(self, offset: int = 0, limit: int = 25) -> List[Clip]:
         db = self._get_db_session()
-        if not db:
-            from config.logging_config import get_logger
-            logger = get_logger(__name__)
-            logger.warning("PostgreSQL unavailable, returning empty list")
-            return []
-            
         try:
-            return db.query(Clip).offset(skip).limit(limit).all()
+            return db.query(Clip).offset(offset).limit(limit).all()
         except Exception as e:
-            from config.logging_config import get_logger
-            logger = get_logger(__name__)
-            logger.error(f"Error getting all clips: {e}")
-            return []
+            raise HTTPException(status_code=400, detail=f"Error getting clips: {e}")
         finally:
             if db:
                 db.close()
@@ -122,27 +80,14 @@ class PostgresClipDAO:
 
 class PostgresPlaylistDAO:
     def _get_db_session(self):
-        from app.config.session import SessionPG
-        if SessionPG is None:
-            return None
         try:
-            session = SessionPG()
-            if session is None:
-                return None
-            return session
+            return SessionPG()
         except Exception as e:
-            from config.logging_config import get_logger
-            logger = get_logger(__name__)
-            logger.error(f"Failed to create PostgreSQL session: {e}")
-            return None
+            raise HTTPException(status_code=503, detail="PostgreSQL service unavailable")
+
 
     def create_playlist(self, playlist_data: dict):
         db = self._get_db_session()
-        if not db:
-            from config.logging_config import get_logger
-            logger = get_logger(__name__)
-            logger.warning("PostgreSQL unavailable, skipping playlist creation")
-            return None
             
         try:
             playlist = Playlist(
@@ -161,48 +106,29 @@ class PostgresPlaylistDAO:
             db.refresh(playlist)
             return playlist
         except Exception as e:
-            from config.logging_config import get_logger
-            logger = get_logger(__name__)
-            logger.error(f"Error creating playlist: {e}")
-            return None
+            raise HTTPException(status_code=400, detail=f"Error getting Playlist: {e}")
         finally:
             if db:
                 db.close()
 
     def get_playlist_by_id(self, playlist_id: str):
         db = self._get_db_session()
-        if not db:
-            from config.logging_config import get_logger
-            logger = get_logger(__name__)
-            logger.warning("PostgreSQL unavailable, returning None")
-            return None
             
         try:
-            return db.query(Playlist).filter(Playlist.id == playlist_id).first()
+            return db.query(Playlist).options(joinedload(Playlist.clips), joinedload(Playlist.profile)).filter(Playlist.id == playlist_id).first()
         except Exception as e:
-            from config.logging_config import get_logger
-            logger = get_logger(__name__)
-            logger.error(f"Error getting playlist by ID: {e}")
-            return None
+            raise HTTPException(status_code=400, detail=f"Error getting Playlist: {e}")
         finally:
             if db:
                 db.close()
 
     def get_all_playlists(self, skip: int = 0, limit: int = 25) -> List[Playlist]:
         db = self._get_db_session()
-        if not db:
-            from config.logging_config import get_logger
-            logger = get_logger(__name__)
-            logger.warning("PostgreSQL unavailable, returning empty list")
-            return []
             
         try:
-            return db.query(Playlist).offset(skip).limit(limit).all()
+            return db.query(Playlist).options(joinedload(Playlist.clips), joinedload(Playlist.profile)).offset(skip).limit(limit).all()
         except Exception as e:
-            from config.logging_config import get_logger
-            logger = get_logger(__name__)
-            logger.error(f"Error getting all playlists: {e}")
-            return []
+            raise HTTPException(status_code=400, detail=f"Error getting Playlist: {e}")
         finally:
             if db:
                 db.close()
@@ -210,28 +136,14 @@ class PostgresPlaylistDAO:
 
 class PostgresProfileDAO:
     def _get_db_session(self):
-        from app.config.session import SessionPG
-        if SessionPG is None:
-            return None
         try:
-            session = SessionPG()
-            if session is None:
-                return None
-            return session
+            return SessionPG()
         except Exception as e:
-            from config.logging_config import get_logger
-            logger = get_logger(__name__)
-            logger.error(f"Failed to create PostgreSQL session: {e}")
-            return None
+            raise HTTPException(status_code=503, detail="PostgreSQL service unavailable")
 
     def create_profile(self, profile_data: dict):
         db = self._get_db_session()
-        if not db:
-            from config.logging_config import get_logger
-            logger = get_logger(__name__)
-            logger.warning("PostgreSQL unavailable, skipping profile creation")
-            return None
-            
+
         try:
             profile = Profile(
                 id=profile_data.get("id", str(uuid.uuid4())),
@@ -247,54 +159,30 @@ class PostgresProfileDAO:
             db.refresh(profile)
             return profile
         except Exception as e:
-            from config.logging_config import get_logger
-            logger = get_logger(__name__)
-            logger.error(f"Error creating profile: {e}")
-            return None
+            raise HTTPException(status_code=400, detail=f"Error getting profile: {e}")
         finally:
             if db:
                 db.close()
 
     def get_profile_by_handle(self, handle: str):
         db = self._get_db_session()
-        if not db:
-            from config.logging_config import get_logger
-            logger = get_logger(__name__)
-            logger.warning("PostgreSQL unavailable, returning None")
-            return None
-            
+
         try:
-            # Load profile with clips and playlists, and also load playlist clips
-            profile = db.query(Profile).options(
+            return db.query(Profile).options(
                 joinedload(Profile.clips),
-                joinedload(Profile.playlists).options(joinedload(Playlist.clips))
-            ).filter(Profile.handle == handle).first()
-            if profile:
-                from config.logging_config import get_logger
-                logger = get_logger(__name__)
-                clips_count = len(profile.clips) if profile.clips else 0
-                playlists_count = len(profile.playlists) if profile.playlists else 0
-                logger.info(f"Retrieved profile {handle} with {clips_count} clips and {playlists_count} playlists")
-            return profile
+                joinedload(Profile.playlists).options(joinedload(Playlist.clips), joinedload(Playlist.profile))
+                ).filter(Profile.handle == handle).first()
+
         except Exception as e:
-            from config.logging_config import get_logger
-            logger = get_logger(__name__)
-            logger.error(f"Error getting profile by handle: {e}")
-            return None
+            raise HTTPException(status_code=400, detail=f"Error getting profile: {e}")
         finally:
             if db:
                 db.close()
 
     def save_profile_with_relationships(self, data: dict):
         db = self._get_db_session()
-        if not db:
-            from config.logging_config import get_logger
-            logger = get_logger(__name__)
-            logger.warning("PostgreSQL unavailable, skipping profile creation")
-            return None
             
         try:
-            # Check if profile already exists
             profile = db.query(Profile).filter(Profile.handle == data["handle"]).first()
             if not profile:
                 profile = self._create_profile_entity(data)
@@ -302,7 +190,6 @@ class PostgresProfileDAO:
                 db.commit()
                 db.refresh(profile)
 
-            # Process clips
             for c in data.get("clips", []):
                 if not c.get("id"):
                     continue
@@ -315,15 +202,17 @@ class PostgresProfileDAO:
                     if clip.profile_id is None:
                         clip.profile_id = profile.id
                         db.flush()
+                
+                if clip not in profile.clips:
+                    profile.clips.append(clip)
+                    db.flush()
 
-            # Process playlists
             for p in data.get("playlists", []):
                 if not p.get("id"):
                     continue
                 playlist_id = uuid.UUID(p["id"]) if isinstance(p["id"], str) else p["id"]
                 playlist = db.query(Playlist).filter(Playlist.id == playlist_id).first()
                 if not playlist:
-                    # Set the handle from the playlist data or from the profile
                     playlist_handle = p.get("handle", data.get("handle", ""))
                     playlist = self._create_playlist_entity(p, profile)
                     playlist.handle = playlist_handle
@@ -333,8 +222,11 @@ class PostgresProfileDAO:
                     if playlist.profile_id is None:
                         playlist.profile_id = profile.id
                         db.flush()
+                
+                if playlist not in profile.playlists:
+                    profile.playlists.append(playlist)
+                    db.flush()
 
-                # Process playlist clips
                 playlist_clips_data = p.get("clips", [])
                 if playlist_clips_data:
                     for clip_data in playlist_clips_data:
@@ -353,15 +245,10 @@ class PostgresProfileDAO:
             db.commit()
             db.refresh(profile)
             
-            # Return the profile with relationships loaded
-            profile_with_relationships = db.query(Profile).options(joinedload(Profile.clips), joinedload(Profile.playlists)).filter(Profile.handle == data["handle"]).first()
-            return profile_with_relationships
+            return db.query(Profile).options(joinedload(Profile.clips), joinedload(Profile.playlists).options(joinedload(Playlist.clips), joinedload(Playlist.profile))).filter(Profile.handle == data["handle"]).first()
         except Exception as e:
-            from config.logging_config import get_logger
-            logger = get_logger(__name__)
-            logger.error(f"Error saving profile with relationships: {e}")
-            db.rollback()  # Rollback the transaction on error
-            return None
+            db.rollback()
+            raise HTTPException(status_code=400, detail=f"Error getting profile: {e}")
         finally:
             if db:
                 db.close()
@@ -464,19 +351,12 @@ class PostgresProfileDAO:
 
     def get_all_profiles(self, skip: int = 0, limit: int = 25) -> List[Profile]:
         db = self._get_db_session()
-        if not db:
-            from config.logging_config import get_logger
-            logger = get_logger(__name__)
-            logger.warning("PostgreSQL unavailable, returning empty list")
-            return []
             
         try:
-            return db.query(Profile).options(joinedload(Profile.clips), joinedload(Profile.playlists)).offset(skip).limit(limit).all()
+            return db.query(Profile).options(joinedload(Profile.clips), joinedload(Profile.playlists).options(joinedload(Playlist.clips), joinedload(Playlist.profile))).offset(skip).limit(limit).all()
         except Exception as e:
-            from config.logging_config import get_logger
-            logger = get_logger(__name__)
-            logger.error(f"Error getting all profiles: {e}")
-            return []
+            raise HTTPException(status_code=400, detail=f"Error getting profile: {e}")
+
         finally:
             if db:
                 db.close()

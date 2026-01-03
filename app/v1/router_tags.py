@@ -7,7 +7,7 @@ from models import (
     TagResponse,
     TagCreate
 )
-from app.v1.service_tag import TagService
+from v1.service_tag import TagService
 
 router = APIRouter()
 

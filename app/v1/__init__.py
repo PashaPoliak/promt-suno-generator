@@ -1,8 +1,8 @@
 from fastapi import APIRouter
-from app.v1.router_playlists import router as playlists_router
-from app.v1.router_users import router as users_router
-from app.v1.router_profiles import router as profiles_router
-from app.v1.router_clips import router as clips_router
+from v1.router_playlists import router as playlists_router
+from v1.router_users import router as users_router
+from v1.router_profiles import router as profiles_router
+from v1.router_clips import router as clips_router
 
 router = APIRouter()
 

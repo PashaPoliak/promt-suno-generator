@@ -1,11 +1,11 @@
 from typing import List, Optional
 
-from app.v1.dao_sqlite import PlaylistDao
+from v1.dao_sqlite import PlaylistDao
 from models.playlist import PlaylistDTO
 from services.api import *
 from config.logging_config import get_logger
 from services.mappers import to_playlist
-from app.v1.dao_sqlite import PlaylistDao
+from v1.dao_sqlite import PlaylistDao
 
 logger = get_logger(__name__)
 

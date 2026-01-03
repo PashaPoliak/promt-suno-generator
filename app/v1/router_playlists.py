@@ -2,9 +2,9 @@ from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session, joinedload
 from typing import List
 
-from app.config.session import get_db_sqlite
-from app.v1.dao_sqlite import PlaylistDao
-from app.v1.service_playlist import PlaylistService
+from config.session import get_db_sqlite
+from v1.dao_sqlite import PlaylistDao
+from v1.service_playlist import PlaylistService
 from models.playlist import PlaylistDTO, PlaylistDTO
 from models.entities import Playlist
 

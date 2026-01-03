@@ -1,6 +1,6 @@
 from datetime import datetime
 from typing import Optional, Any
-
+import json
 from models.profile import ProfileDTO
 from models.clip import ClipSlimDTO, ClipDTO, MetadataDTO, ClipBaseDTO
 from models.playlist import PlaylistDTO
@@ -60,13 +60,11 @@ def safe_get_attr(obj: Any, attr: str, default: Any = None) -> Any:
 
 def process_clip_metadata(metadata_dict: dict) -> dict:
     if not isinstance(metadata_dict, dict):
-        # If it's a string, try to parse it as JSON
         if isinstance(metadata_dict, str):
             import json
             try:
                 metadata_dict = json.loads(metadata_dict)
             except (json.JSONDecodeError, TypeError):
-                # If parsing fails, return an empty dict
                 return {}
         else:
             return {}
@@ -80,9 +78,7 @@ def process_clip_metadata(metadata_dict: dict) -> dict:
 
 
 def create_metadata_dto(metadata_dict: dict) -> MetadataDTO:
-    # Handle case where metadata_dict might be a string
     if isinstance(metadata_dict, str):
-        import json
         try:
             metadata_dict = json.loads(metadata_dict)
         except (json.JSONDecodeError, TypeError):
@@ -147,12 +143,12 @@ def create_playlist_dto(profile: Profile):
     result = []
     for playlist in playlists:
         try:
-            result.append(to_playlist_dto(playlist, clips))
+            if hasattr(playlist, 'clips') and hasattr(playlist, 'profile'):
+                result.append(to_playlist_dto(playlist, clips))
+            else:
+                continue
         except Exception as e:
-            from config.logging_config import get_logger
-            logger = get_logger(__name__)
-            logger.error(f"Error creating playlist DTO for playlist {playlist.id}: {e}")
-            continue  # Skip this playlist and continue with others
+            continue
     return result
 
 def to_playlist(playlist: Playlist) -> PlaylistDTO:
@@ -167,21 +163,25 @@ def to_playlist(playlist: Playlist) -> PlaylistDTO:
 
 def to_playlist_dto(playlist: Playlist, clips) -> PlaylistDTO:
     try:
-        # Get clips that belong to this specific playlist
         playlist_clips = [clip for clip in clips if clip in playlist.clips]
+        profile_handle = ""
+        if hasattr(playlist, 'profile') and playlist.profile:
+            try:
+                profile_handle = safe_str_convert(getattr(playlist.profile, 'handle', ''), "")
+            except:
+                profile_handle = safe_str_convert(getattr(playlist, 'user_handle', ''), "")
+        elif hasattr(playlist, 'user_handle'):
+            profile_handle = safe_str_convert(playlist.user_handle, "")
+        
         return PlaylistDTO(
             id=safe_str_convert(playlist.id, ""),
             name=safe_str_convert(playlist.name, ""),
-            handle=safe_str_convert(getattr(playlist.profile, 'handle', ''), "") if playlist.profile else "",
+            handle=profile_handle,
             description=safe_str_optional(playlist.description, None),
             image_url=safe_str_optional(playlist.image_url, None),
             clips=create_clips_dto_from_playlist(playlist_clips)
         )
     except Exception as e:
-        from config.logging_config import get_logger
-        logger = get_logger(__name__)
-        logger.error(f"Error in to_playlist_dto: {e}")
-        # Re-raise with more context
         raise
 
 def to_profile_dto(profile: Profile) -> ProfileDTO:
@@ -196,10 +196,6 @@ def to_profile_dto(profile: Profile) -> ProfileDTO:
             playlists=create_playlist_dto(profile)
         )
     except Exception as e:
-        from config.logging_config import get_logger
-        logger = get_logger(__name__)
-        logger.error(f"Error in to_profile_dto: {e}")
-        # Re-raise with more context
         raise
 
 
@@ -209,7 +205,6 @@ def create_playlist_dto_for_profile(profile: Profile):
     
     playlist_dtos = []
     for playlist in playlists:
-        # Get clips that belong to this specific playlist
         playlist_clips = [clip for clip in all_clips if clip in playlist.clips]
         playlist_dtos.append(PlaylistDTO(
             id=safe_str_convert(playlist.id, ""),
@@ -232,10 +227,6 @@ def to_clip_dto(clip: Clip) -> ClipDTO:
         image_url=safe_get_attr(clip, 'image_url', None),
         image_large_url=safe_get_attr(clip, 'image_large_url', None),
         clip_metadata=create_metadata_dto(safe_get_attr(clip, 'clip_metadata', {})),
-        caption=safe_get_attr(clip, 'caption', None),
-        type=safe_get_attr(clip, 'type', None),
-        duration=safe_get_attr(clip, 'duration', None),
-        task=safe_get_attr(clip, 'task', None),
         user_id=safe_str_optional(safe_get_attr(clip, 'user_id', None), None),
         display_name=safe_get_attr(clip, 'display_name', None),
         handle=safe_get_attr(clip, 'handle', None),
@@ -244,14 +235,12 @@ def to_clip_dto(clip: Clip) -> ClipDTO:
 
 
 def create_clip_slim(data: dict) -> Clip:
-    # Convert string IDs to UUID if possible
     import uuid
     clip_id = data["id"]
     if isinstance(clip_id, str):
         try:
             clip_id = uuid.UUID(clip_id)
         except ValueError:
-            # If it's not a valid UUID string, keep it as is
             pass
     
     user_id = data.get("user_id")
@@ -259,7 +248,6 @@ def create_clip_slim(data: dict) -> Clip:
         try:
             user_id = uuid.UUID(user_id)
         except ValueError:
-            # If it's not a valid UUID string, keep it as is
             pass
     
     return Clip(

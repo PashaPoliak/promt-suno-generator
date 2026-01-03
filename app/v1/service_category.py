@@ -2,7 +2,7 @@ from fastapi import Depends
 from sqlalchemy.orm import Session
 from typing import List, Optional
 
-from app.config.session import get_db_sqlite
+from config.session import get_db_sqlite
 from models.entities import Category
 from models.category import CategoryCreate, CategoryResponse
 

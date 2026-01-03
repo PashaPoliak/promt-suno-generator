@@ -1,5 +1,7 @@
 from fastapi import APIRouter, HTTPException
+from app.services.mappers import to_playlist_dto
 from config.logging_config import get_logger
+from models.playlist import PlaylistDTO
 from v3.postgres_dao import PostgresPlaylistDAO
 
 logger = get_logger(__name__)
@@ -9,29 +11,19 @@ router = APIRouter()
 @router.get("")
 async def get_playlists_v3():
     try:
-        dao = PostgresPlaylistDAO()
-        playlists = dao.get_all_playlists()
-        if playlists is None:
-            return []
-        return playlists
+        return PostgresPlaylistDAO().get_all_playlists()
     except Exception as e:
         logger.error(f"Error retrieving playlists: {e}")
-        # Return empty list instead of failing if both databases are unavailable
         return []
 
 
 @router.get("/{playlist_id}")
-async def get_playlist_by_id_v3(playlist_id: str):
+async def get_playlist_by_id_v3(playlist_id: str) -> PlaylistDTO:
     try:
         dao = PostgresPlaylistDAO()
         playlist = dao.get_playlist_by_id(playlist_id)
-        if playlist:
-            return playlist
-        else:
-            raise HTTPException(status_code=404, detail=f"Playlist {playlist_id} not found")
-    except HTTPException:
-        raise
+        all_clips = getattr(playlist, 'clips', []) or []
+        return to_playlist_dto(playlist, all_clips)
     except Exception as e:
         logger.error(f"Error retrieving playlist {playlist_id}: {e}")
-        # Return 404 instead of 500 if both databases are unavailable
-        raise HTTPException(status_code=404, detail=f"Playlist {playlist_id} not found or database unavailable")
+        raise HTTPException(status_code=503, detail=f"Playlist {playlist_id} not found")

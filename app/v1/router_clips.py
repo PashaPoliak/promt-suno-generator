@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 from typing import List
 
-from app.v1.service_clip import ClipService
+from v1.service_clip import ClipService
 from services.api import fetch_clip_from_suno
 from services.mappers import to_clip_dto
 from config.session import get_db_sqlite
