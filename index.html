@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>QA Test Search</title>
+    <style>
+        body { font-family: sans-serif; max-width: 900px; margin: 20px auto; background: #f4f4f9; }
+        .search-box { width: 100%; padding: 5px; font-size: 18px; margin-bottom: 5px; border: 1px solid #ddd; }
+        .card { background: white; padding: 10px; margin-bottom: 5px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        .correct { color: #2e7d32; font-weight: bold; margin-top: 10px; }
+        .explanation { background: #e8f5e9; padding: 10px; border-left: 4px solid #2e7d32; margin-top: 10px; }
+        .match { background: yellow; }
+        .option { margin-left: 20px; color: #555; }
+    </style>
+</head>
+<body>
+
+<input type="text" id="searchInput" class="search-box" placeholder="Search questions or explanations...">
+<div id="results"></div>
+
+<script src="data.js"></script>
+<script>
+    const searchInput = document.getElementById('searchInput');
+    const resultsDiv = document.getElementById('results');
+
+    function highlight(text, query) {
+        if (!query) return text;
+        const re = new RegExp(`(${query})`, 'gi');
+        return text.replace(re, '<span class="match">$1</span>');
+    }
+
+    function render(filter = '') {
+        if (!examData) return;
+        resultsDiv.innerHTML = '';
+        const filtered = examData.data.filter(q =>
+            q.question.toLowerCase().includes(filter.toLowerCase()) ||
+            (q.explanation || "").toLowerCase().includes(filter.toLowerCase())
+        );
+
+        filtered.forEach(q => {
+            const div = document.createElement('div');
+            div.className = 'card';
+
+            const explanationText = q.explanation;
+
+             div.innerHTML = `
+                 <h4>${highlight(q.question, filter)}</h4>
+                 <div class="correct">${q.correctAnswer}</div>
+                 <div class="explanation">
+                     ${highlight(explanationText, filter)}
+                 </div>
+             `;
+            resultsDiv.appendChild(div);
+        });
+    }
+
+    searchInput.addEventListener('input', (e) => render(e.target.value));
+
+    const checkData = () => examData ? render() : setTimeout(checkData, 50);
+    checkData();
+</script>
+</body>
+</html>
