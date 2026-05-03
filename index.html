@@ -4,59 +4,177 @@
     <meta charset="UTF-8">
     <title>QA Test Search</title>
     <style>
-        body { font-family: sans-serif; max-width: 900px; margin: 20px auto; background: #f4f4f9; }
+        body { font-family: sans-serif; margin: 0 0 0 120px; background: #f4f4f9; }
         .search-box { width: 100%; padding: 5px; font-size: 18px; margin-bottom: 5px; border: 1px solid #ddd; }
         .card { background: white; padding: 10px; margin-bottom: 5px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
         .correct { color: #2e7d32; font-weight: bold; margin-top: 10px; }
         .explanation { background: #e8f5e9; padding: 10px; border-left: 4px solid #2e7d32; margin-top: 10px; }
         .match { background: yellow; }
         .option { margin-left: 20px; color: #555; }
+        .sidebar { width: 160px; position: absolute; left: 0; top: 0; background: #fff; border-right: 1px solid #ddd; padding: 20px; box-sizing: border-box; overflow-y: auto; }
+        .sidebar h3 { margin-top: 0; font-size: 14px; color: #666; text-transform: uppercase; }
+        .tag-btn { display: block; background: #e8f5e9; border: 1px solid #2e7d32; color: #2e7d32; padding: 4px 8px; border-radius: 12px; font-size: 12px; margin: 4px 0; cursor: pointer; text-decoration: none; text-align: center; }
+        .tag-btn:hover { background: #2e7d32; color: white; }
+        .tag-btn.active { background: #2e7d32; color: white; }
+        .main-content { margin-left: 40px; padding: 20px; position: relative; }
+        .tag-badge { display: inline-block; background: #e8f5e9; color: #2e7d32; padding: 2px 8px; border-radius: 10px; font-size: 11px; margin: 2px; border: 1px solid #2e7d32; }
     </style>
 </head>
 <body>
 
-<input type="text" id="searchInput" class="search-box" placeholder="Search questions or explanations...">
-<div id="results"></div>
+<div class="sidebar">
+    <div id="tagCloud"></div>
+</div>
+
+<div class="main-content">
+    <input type="text" id="searchInput" class="search-box"
+           placeholder="Search questions, answers, explanations (use tag:agent for tags)...">
+    <div id="results"></div>
+</div>
 
 <script src="data.js"></script>
 <script>
     const searchInput = document.getElementById('searchInput');
     const resultsDiv = document.getElementById('results');
 
-    function highlight(text, query) {
-        if (!query) return text;
-        const re = new RegExp(`(${query})`, 'gi');
-        return text.replace(re, '<span class="match">$1</span>');
+    const AVAILABLE_TAGS = [
+        'subagent',
+        'monolithic',
+        'PDF',
+        'API',
+        'SQL',
+        'JSON',
+        'MCP',
+        'json_schema',
+        'escalate_to_human',
+        'tool_use',
+        '_refund',
+        'strategy',
+        'hook',
+        'skill',
+        'batch',
+        'database',
+        'context',
+        'decomposition',
+        'CLAUDE.md',
+         '/memory',
+        'fork_session',
+        'prompt_caching',
+         'confidence_score',
+          'chunking',
+        'normalization',
+         'chain_of_thought',
+          'extraction_failure',
+        'escalation',
+    ];
+
+    function extractTags(q) {
+        const searchableText = (q.question + ' ' + (q.correctAnswer || '') + ' ' + (q.explanation || '')).toLowerCase();
+        return AVAILABLE_TAGS.filter(tag => searchableText.includes(tag.toLowerCase()));
+    }
+
+    function highlight(text, terms) {
+        if (!terms || terms.length === 0) return text;
+        let highlighted = text;
+        terms.forEach(term => {
+            const escaped = term.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+            highlighted = highlighted.replace(new RegExp(`(${escaped})`, 'gi'), '<span class="match">$1</span>');
+        });
+        return highlighted;
+    }
+
+    function parseQuery(raw) {
+        const tokens = raw.toLowerCase().trim().split(/\s+/).filter(Boolean);
+        const tagTerms = tokens.filter(t => t.startsWith('tag:')).map(t => t.slice(4)).filter(Boolean);
+        const searchTerms = tokens.filter(t => !t.startsWith('tag:')).filter(Boolean);
+        return { tagTerms, searchTerms };
+    }
+
+    function matchesTags(q, tagTerms) {
+        if (tagTerms.length === 0) return true;
+        const qTags = (q.tags || extractTags(q)).map(t => t.toLowerCase());
+        return tagTerms.every(tagTerm => qTags.includes(tagTerm));
+    }
+
+    function matchesSearch(q, searchTerms) {
+        if (searchTerms.length === 0) return true;
+        const words = q.question.toLowerCase().split(/\W+/).filter(Boolean);
+        return searchTerms.every(term => words.some(word => word.startsWith(term)));
     }
 
     function render(filter = '') {
-        if (!examData) return;
+        if (typeof examData === 'undefined') return;
         resultsDiv.innerHTML = '';
-        const filtered = examData.data.filter(q =>
-            q.question.toLowerCase().includes(filter.toLowerCase()) ||
-            (q.explanation || "").toLowerCase().includes(filter.toLowerCase())
-        );
+
+        const { tagTerms, searchTerms } = parseQuery(filter);
+        const displayTerms = [...searchTerms, ...tagTerms];
+
+        const filtered = examData.data.filter(q => matchesTags(q, tagTerms) && matchesSearch(q, searchTerms));
 
         filtered.forEach(q => {
             const div = document.createElement('div');
             div.className = 'card';
 
-            const explanationText = q.explanation;
-
-             div.innerHTML = `
-                 <h4>${highlight(q.question, filter)}</h4>
-                 <div class="correct">${q.correctAnswer}</div>
-                 <div class="explanation">
-                     ${highlight(explanationText, filter)}
-                 </div>
-             `;
+            div.innerHTML = `
+                <h4>${highlight(q.question, displayTerms)}</h4>
+                <div class="correct">${highlight(q.correctAnswer, displayTerms)}</div>
+            `;
             resultsDiv.appendChild(div);
+        });
+
+        updateActiveTagState(tagTerms);
+    }
+
+    function updateActiveTagState(activeTags) {
+        document.querySelectorAll('.tag-btn').forEach(btn => {
+            const btnTag = btn.textContent.trim().toLowerCase();
+            btn.classList.toggle('active', activeTags.includes(btnTag));
         });
     }
 
-    searchInput.addEventListener('input', (e) => render(e.target.value));
+    function addTagFilter(tag) {
+        const tagFilter = 'tag:' + tag;
+        const current = searchInput.value.trim();
+        if (current.toLowerCase().includes(tagFilter.toLowerCase())) {
+            searchInput.value = current.replace(new RegExp('\\s*tag:' + tag.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'gi'), '').trim();
+        } else {
+            searchInput.value = current ? current + ' ' + tagFilter : tagFilter;
+        }
+        render(searchInput.value);
+    }
 
-    const checkData = () => examData ? render() : setTimeout(checkData, 50);
+    function clearTagFilter() {
+        searchInput.value = '';
+        render('');
+    }
+
+    function renderTagButtons() {
+        const tagCloud = document.getElementById('tagCloud');
+        tagCloud.innerHTML = '';
+
+        const clearBtn = document.createElement('a');
+        clearBtn.className = 'tag-btn';
+        clearBtn.href = 'javascript:void(0)';
+        clearBtn.textContent = 'Clear';
+        clearBtn.style.cssText = 'background:#ffebee;border-color:#c62828;color:#c62828';
+        clearBtn.onclick = clearTagFilter;
+        tagCloud.appendChild(clearBtn);
+
+        AVAILABLE_TAGS.forEach(tag => {
+            const btn = document.createElement('a');
+            btn.className = 'tag-btn';
+            btn.href = 'javascript:void(0)';
+            btn.textContent = tag;
+            btn.onclick = () => addTagFilter(tag);
+            tagCloud.appendChild(btn);
+        });
+    }
+
+    searchInput.addEventListener('input', e => render(e.target.value));
+
+    renderTagButtons();
+
+    const checkData = () => typeof examData !== 'undefined' ? (render(), updateActiveTagState([])) : setTimeout(checkData, 50);
     checkData();
 </script>
 </body>
