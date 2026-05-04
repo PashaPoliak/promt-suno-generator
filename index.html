@@ -5,8 +5,8 @@
     <title>QA Test Search</title>
     <style>
         body { font-family: sans-serif; margin: 0 0 0 200px; background: #f4f4f9; }
-        .search-box { width: 100%; padding: 5px; font-size: 18px; margin-bottom: 5px; border: 1px solid #ddd; }
-        .card { background: white; padding: 10px; margin-bottom: 5px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        .search-box { width: 100%; padding: 5px; font-size: 18px; margin-bottom: 5px; border: 1px solid #ddd; position: sticky; top: 0; background: white; z-index: 10; }
+        .card { background: white; padding: 10px; margin-bottom: 5px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); max-width: 48%; }
         .correct { color: #2e7d32; font-weight: bold; margin-top: 10px; }
         .explanation { background: #e8f5e9; padding: 10px; border-left: 4px solid #2e7d32; margin-top: 10px; }
         .match { background: yellow; }
@@ -19,6 +19,7 @@
         .tag-btn:hover { background: #2e7d32; color: white; }
         .tag-btn.active { background: #2e7d32; color: white; }
         .main-content { margin-left: 0px; padding: 20px; position: relative; }
+        #results { display: flex; flex-wrap: wrap; gap: 5px; }
         .tag-badge { display: inline-block; background: #e8f5e9; color: #2e7d32; padding: 2px 8px; border-radius: 10px; font-size: 11px; margin: 2px; border: 1px solid #2e7d32; }
     </style>
 </head>
@@ -40,30 +41,35 @@
     const resultsDiv = document.getElementById('results');
 
     const AVAILABLE_TAGS = [
-        'HTTP',
+        'health',
         'aws',
         'PDF',
         'API',
         'SQL',
         'JSON',
+        'CSV',
         'MCP',
+        'WORM',
         'test',
         'hook',
+        'team',
+        'multi',
         'costs',
         'skill',
         'batch',
         'chunk',
         'chain',
-        'human',
         'legacy',
         'pattern',
+        'system',
+        'codebase',
         'failure',
         'exceeds',
-        'agentic',
+        'agent',
         'initiate',
+        'document',
         'tool_use',
-        '_refund',
-        'database',
+        'refund',
         'strategy',
         'database',
         'context',
@@ -73,25 +79,30 @@
         'accurately',
         'hallucinate',
         'insurance',
-        'issue_type',
-        'unauthorized',
-        'json_schema',
-        'confidence_score',
-        'escalate_to_human',
+        'issue_',
+        'authorized',
+        'schema',
+        'score',
+        'human',
         'fork_session',
         'decomposition',
         'programmatic',
-        '/memory',
+        'memory',
         'normalization',
         'cybersecurity',
-        'escalation',
+        'escalat',
         'developer',
         'interactive',
-        'architectural',
+        'architect',
+        'error',
+        'tool',
+        'lookup',
+        'DevOps',
+        'Claude',
     ];
 
     function extractTags(q) {
-        const searchableText = (q.question + ' ' + (q.correctAnswer || '') + ' ' + (q.explanation || '')).toLowerCase();
+        const searchableText = (q.question + ' ' + (q.correctAnswer || '')).toLowerCase();
         return AVAILABLE_TAGS.filter(tag => searchableText.includes(tag.toLowerCase()));
     }
 
@@ -99,7 +110,7 @@
         if (!terms || terms.length === 0) return text;
         let highlighted = text;
         terms.forEach(term => {
-            const escaped = term.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+            const escaped = term.replace(/[.*+?^${}()|[\]\\/-]/g, '\\$&');
             highlighted = highlighted.replace(new RegExp(`(${escaped})`, 'gi'), '<span class="match">$1</span>');
         });
         return highlighted;
@@ -107,7 +118,7 @@
 
     function parseQuery(raw) {
         const tokens = raw.toLowerCase().trim().split(/\s+/).filter(Boolean);
-        const tagTerms = tokens.filter(t => t.startsWith('tag:')).map(t => t.slice(4)).filter(Boolean);
+        const tagTerms = tokens.filter(t => t.startsWith('tag:')).map(t => t.slice(4).toLowerCase()).filter(Boolean);
         const searchTerms = tokens.filter(t => !t.startsWith('tag:')).filter(Boolean);
         return { tagTerms, searchTerms };
     }
@@ -120,8 +131,8 @@
 
     function matchesSearch(q, searchTerms) {
         if (searchTerms.length === 0) return true;
-        const words = q.question.toLowerCase().split(/\W+/).filter(Boolean);
-        return searchTerms.every(term => words.some(word => word.startsWith(term)));
+        const text = q.question.toLowerCase();
+        return searchTerms.every(term => text.includes(term.toLowerCase()));
     }
 
     function render(filter = '') {
@@ -182,9 +193,11 @@
         clearBtn.onclick = clearTagFilter;
         tagCloud.appendChild(clearBtn);
 
-        const midPoint = Math.ceil(AVAILABLE_TAGS.length / 2);
-        const col1 = [...AVAILABLE_TAGS.slice(0, midPoint)];
-        const col2 = [...AVAILABLE_TAGS.slice(midPoint)];
+        // Sort tags by length descending
+        const sortedTags = [...AVAILABLE_TAGS].sort((a, b) => b.length - a.length);
+        const midPoint = Math.ceil(sortedTags.length / 2);
+        const col1 = sortedTags.slice(0, midPoint).sort((a, b) => a.toLowerCase().localeCompare(b.toLowerCase()));
+        const col2 = sortedTags.slice(midPoint).sort((a, b) => a.toLowerCase().localeCompare(b.toLowerCase()));
 
         const tagColumns = document.createElement('div');
         tagColumns.className = 'tag-columns';
