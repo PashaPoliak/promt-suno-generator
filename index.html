@@ -4,15 +4,15 @@
     <meta charset="UTF-8">
     <title>QA Test Search</title>
     <style>
-        body { font-family: sans-serif; margin: 0 0 0 200px; background: #f4f4f9; }
+        body { font-family: sans-serif; margin: 0 0 0 220px; background: #f4f4f9; }
         .search-box { width: 100%; padding: 5px; font-size: 18px; margin-bottom: 5px; border: 1px solid #ddd; position: sticky; top: 0; background: white; z-index: 10; }
-        .card { background: white; padding: 10px; margin-bottom: 5px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); max-width: 48%; }
+        .card { background: white; padding: 10px; margin-bottom: 5px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
         .correct { color: #2e7d32; font-weight: bold; margin-top: 10px; }
         .explanation { background: #e8f5e9; padding: 10px; border-left: 4px solid #2e7d32; margin-top: 10px; }
         .match { background: yellow; }
         .option { margin-left: 20px; color: #555; }
-        .sidebar { width: 220px; position: absolute; left: 0; top: 0; background: #fff; border-right: 1px solid #ddd; padding: 5px; box-sizing: border-box; overflow-y: auto; }
-        .tag-btn { display: block; background: #e8f5e9; border: 1px solid #2e7d32; color: #2e7d32; padding: 4px 8px; border-radius: 12px; font-size: 12px; margin: 4px 0; cursor: pointer; text-decoration: none; text-align: center; }
+        .sidebar { width: 240px; position: absolute; left: 0; top: 0; background: #fff; border-right: 1px solid #ddd; padding: 5px; box-sizing: border-box; overflow-y: auto; }
+        .tag-btn { display: block; background: #e8f5e9; border: 1px solid #2e7d32; color: #2e7d32; padding: 4px 8px; border-radius: 12px; font-size: 12px; margin: 2px 0; cursor: pointer; text-decoration: none; text-align: center; }
         .tag-columns { display: flex; gap: 5px; }
         .tag-column { flex: 1; }
         .sidebar h3 { margin-top: 0; font-size: 14px; color: #666; text-transform: uppercase; }
@@ -43,7 +43,9 @@
     const AVAILABLE_TAGS = [
         'health',
         'aws',
+        'bot',
         'PDF',
+        'SLA',
         'API',
         'SQL',
         'JSON',
@@ -52,7 +54,9 @@
         'WORM',
         'test',
         'hook',
+        'logs',
         'team',
+        'token',
         'multi',
         'costs',
         'skill',
@@ -60,13 +64,20 @@
         'chunk',
         'chain',
         'legacy',
+        'approach',
+        'review',
         'pattern',
         'system',
         'codebase',
-        'failure',
-        'exceeds',
+        'fail',
+        'medic',
+        'identify',
+        'ensure',
+        'pipeline',
+        'impl',
+        'exceed',
         'agent',
-        'initiate',
+        'init',
         'document',
         'tool_use',
         'refund',
@@ -77,7 +88,7 @@
         'monolithic',
         'engineer',
         'accurately',
-        'hallucinate',
+        'hallucinat',
         'insurance',
         'issue_',
         'authorized',
@@ -85,7 +96,7 @@
         'score',
         'human',
         'fork_session',
-        'decomposition',
+        'decompos',
         'programmatic',
         'memory',
         'normalization',
@@ -131,8 +142,8 @@
 
     function matchesSearch(q, searchTerms) {
         if (searchTerms.length === 0) return true;
-        const text = q.question.toLowerCase();
-        return searchTerms.every(term => text.includes(term.toLowerCase()));
+        const words = q.question.toLowerCase().split(/[^\w/-]+/).filter(Boolean);
+        return searchTerms.every(term => words.some(word => word.startsWith(term)));
     }
 
     function render(filter = '') {
@@ -172,7 +183,9 @@
             searchInput.value = current.replace(new RegExp('\\s*tag:' + tag.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'gi'), '').trim();
         } else {
             searchInput.value = current ? current + ' ' + tagFilter : tagFilter;
+            searchInput.value += ' ';
         }
+            searchInput.focus();
         render(searchInput.value);
     }
 
@@ -193,16 +206,16 @@
         clearBtn.onclick = clearTagFilter;
         tagCloud.appendChild(clearBtn);
 
-        // Sort tags by length descending
         const sortedTags = [...AVAILABLE_TAGS].sort((a, b) => b.length - a.length);
-        const midPoint = Math.ceil(sortedTags.length / 2);
-        const col1 = sortedTags.slice(0, midPoint).sort((a, b) => a.toLowerCase().localeCompare(b.toLowerCase()));
-        const col2 = sortedTags.slice(midPoint).sort((a, b) => a.toLowerCase().localeCompare(b.toLowerCase()));
+        const third = Math.ceil(sortedTags.length / 3);
+        const col1 = sortedTags.slice(0, third).sort((a, b) => a.toLowerCase().localeCompare(b.toLowerCase()));
+        const col2 = sortedTags.slice(third, 2 * third).sort((a, b) => a.toLowerCase().localeCompare(b.toLowerCase()));
+        const col3 = sortedTags.slice(2 * third).sort((a, b) => a.toLowerCase().localeCompare(b.toLowerCase()));
 
         const tagColumns = document.createElement('div');
         tagColumns.className = 'tag-columns';
 
-        [col1, col2].forEach(tags => {
+        [col1, col2, col3].forEach(tags => {
             const column = document.createElement('div');
             column.className = 'tag-column';
 
