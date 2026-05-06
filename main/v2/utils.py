@@ -2,7 +2,7 @@ import json
 from pathlib import Path
 from typing import Optional
 
-from ..config.logging_config import get_logger
+from main.config.logging_config import get_logger
 logger = get_logger(__name__)
 
 def read_json_file(file_path: str) -> Optional[dict]:

@@ -2,13 +2,13 @@ from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session, joinedload
 from typing import List
 
-from ..config.session import get_db_sqlite
+from main.config.session import get_db_sqlite
 from v1.dao_sqlite import PlaylistDao
 from v1.service_playlist import PlaylistService
 from models.playlist import PlaylistDTO, PlaylistDTO
 from models.entities import Playlist
 
-from ..config.logging_config import get_logger
+from main.config.logging_config import get_logger
 
 logger = get_logger(__name__)
 

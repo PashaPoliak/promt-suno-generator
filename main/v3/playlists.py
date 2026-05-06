@@ -1,6 +1,6 @@
 from fastapi import APIRouter, HTTPException
-from app.services.mappers import to_playlist_dto
-from ..config.logging_config import get_logger
+from main.services.mappers import to_playlist_dto
+from main.config.logging_config import get_logger
 from models.playlist import PlaylistDTO
 from v3.postgres_dao import PostgresPlaylistDAO
 

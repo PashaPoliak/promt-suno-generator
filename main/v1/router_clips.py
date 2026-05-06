@@ -5,11 +5,11 @@ from typing import List
 from v1.service_clip import ClipService
 from services.api import fetch_clip_from_suno
 from services.mappers import to_clip_dto
-from ..config.session import get_db_sqlite
+from main.config.session import get_db_sqlite
 from models.clip import ClipDTO
 from models.entities import Clip
 
-from ..config.logging_config import get_logger
+from main.config.logging_config import get_logger
 
 logger = get_logger(__name__)
 

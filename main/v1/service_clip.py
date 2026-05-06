@@ -4,7 +4,7 @@ from typing import Optional
 from models.clip import ClipDTO
 from models.entities import Clip
 from services.api import *
-from ..config.logging_config import get_logger
+from main.config.logging_config import get_logger
 from services.mappers import to_clip_dto, create_clip_slim
 
 logger = get_logger(__name__)

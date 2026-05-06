@@ -2,7 +2,7 @@ import requests
 import json
 import os
 
-from ..config.logging_config import get_logger
+from main.config.logging_config import get_logger
 logger = get_logger(__name__)
 
 def save_to_file_json(folder_name, filename, data):

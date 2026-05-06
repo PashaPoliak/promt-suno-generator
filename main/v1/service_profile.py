@@ -1,9 +1,9 @@
 from typing import List, Optional
-from ..config.session import get_db_sqlite
+from main.config.session import get_db_sqlite
 from v1.dao_sqlite import ProfileDao
 from models.profile import ProfileDTO
 from services.api import fetch_profile_from_suno
-from ..config.logging_config import get_logger
+from main.config.logging_config import get_logger
 from services.mappers import to_profile_dto
 
 

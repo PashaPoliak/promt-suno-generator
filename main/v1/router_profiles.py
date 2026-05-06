@@ -1,10 +1,10 @@
 from fastapi import APIRouter, Depends
 from typing import List
 from models.profile import ProfileDTO
-from ..config.logging_config import get_logger
+from main.config.logging_config import get_logger
 from v1.service_profile import ProfileService
 from v1.dao_sqlite import ProfileDao
-from ..config.session import get_db_sqlite
+from main.config.session import get_db_sqlite
 
 logger = get_logger(__name__)
 

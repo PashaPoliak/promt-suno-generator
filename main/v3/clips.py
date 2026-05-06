@@ -3,7 +3,7 @@ from fastapi import APIRouter, HTTPException, Depends, Query
 from services.mappers import to_clip_dto
 from models.clip import ClipDTO
 from v3.postgres_dao import PostgresClipDAO
-from ..config.logging_config import get_logger
+from main.config.logging_config import get_logger
 from typing import List, Optional
 
 logger = get_logger(__name__)

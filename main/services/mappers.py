@@ -5,7 +5,7 @@ from models.profile import ProfileDTO
 from models.clip import ClipSlimDTO, ClipDTO, MetadataDTO, ClipBaseDTO
 from models.playlist import PlaylistDTO
 from models.entities import Profile, Clip, Playlist
-from ..config.logging_config import get_logger
+from main.config.logging_config import get_logger
 
 logger = get_logger(__name__)
 

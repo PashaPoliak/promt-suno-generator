@@ -2,9 +2,9 @@ from fastapi import HTTPException
 from sqlalchemy.orm import joinedload
 from typing import List
 import uuid
-from ..config.logging_config import get_logger
+from main.config.logging_config import get_logger
 from models.entities import *
-from ..config.session import SessionPG
+from main.config.session import SessionPG
 
 logger = get_logger(__name__)
 

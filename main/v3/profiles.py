@@ -1,6 +1,6 @@
 from fastapi import APIRouter, HTTPException, Depends
 from v3.postgres_dao import PostgresProfileDAO
-from ..config.logging_config import get_logger
+from main.config.logging_config import get_logger
 from services.mappers import to_profile_dto
 from models.profile import ProfileDTO
 from services.api import fetch_profile_from_suno

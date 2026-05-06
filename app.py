@@ -1,32 +1,42 @@
 from flask import Flask, request, jsonify, render_template_string
-import easyocr
 import requests
+import base64
+import os
 
 app = Flask(__name__)
 
-# Load model once at startup
-reader = easyocr.Reader(['en'], gpu=False)
-
-SERVER_URL = 'https://ocr-vh1p.onrender.com/api/text'
+OCR_SPACE_API_KEY = os.environ.get('OCR_API_KEY')
+GALLERY_URL = 'https://ocr-vh1p.onrender.com/api/text'
 
 @app.route('/api/image', methods=['POST'])
 def process_image():
     try:
+        if not OCR_SPACE_API_KEY:
+            return jsonify({'error': 'Server configuration error: Missing API Key'}), 500
+
         if 'image' not in request.files:
             return jsonify({'error': 'No image'}), 400
-            
+
         file = request.files['image']
-        img_bytes = file.read()
-        
-        results = reader.readtext(img_bytes)
-        text = ' '.join([result[1] for result in results]).strip()
-        
-        if not text:
-            return jsonify({'status': 'empty'}), 200
-            
-        payload = {'filename': 'capture.jpg', 'text': text}
-        response = requests.post(SERVER_URL, json=payload, timeout=10)
-        
+        img_data = file.read()
+        base64_image = base64.b64encode(img_data).decode('utf-8')
+
+        payload = {
+            'base64Image': f"data:image/jpeg;base64,{base64_image}",
+            'apikey': OCR_SPACE_API_KEY,
+            'language': 'eng',
+        }
+
+        api_resp = requests.post('https://api.ocr.space/parse/image', data=payload, timeout=15).json()
+
+        if not api_resp.get('ParsedResults'):
+            return jsonify({'status': 'ocr_failed', 'details': api_resp}), 400
+
+        text = api_resp['ParsedResults'][0]['ParsedText'].strip()
+
+        if text:
+            requests.post(GALLERY_URL, json={'filename': 'capture.jpg', 'text': text}, timeout=10)
+
         return jsonify({'status': 'success', 'ocr': text})
     except Exception as e:
         return jsonify({'error': str(e)}), 500
@@ -37,7 +47,7 @@ def camera():
 <!DOCTYPE html>
 <html>
 <head>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
         body, html { margin: 0; padding: 0; width: 100%; height: 100%; overflow: hidden; background: #000; }
         video { width: 100vw; height: 100vh; object-fit: cover; }
@@ -55,7 +65,6 @@ def camera():
         const v = document.getElementById('v');
         navigator.mediaDevices.getUserMedia({video: {facingMode: 'environment'}})
             .then(s => v.srcObject = s);
-
         function snap() {
             const c = document.getElementById('c');
             c.width = v.videoWidth;
@@ -65,7 +74,7 @@ def camera():
                 const f = new FormData();
                 f.append('image', b, 'p.jpg');
                 fetch('/api/image', {method: 'POST', body: f});
-            }, 'image/jpeg', 0.8);
+            }, 'image/jpeg', 0.6);
         }
     </script>
 </body>
@@ -74,4 +83,3 @@ def camera():
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=3000)
-    

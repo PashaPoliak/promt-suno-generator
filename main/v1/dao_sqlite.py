@@ -1,10 +1,10 @@
 from typing import List
 from fastapi import Depends, HTTPException
-from ..config.session import get_db_sqlite
+from main.config.session import get_db_sqlite
 from services.mappers import to_playlist
 from models.entities import Profile, Clip, Playlist
 from sqlalchemy.orm import joinedload
-from ..config.logging_config import get_logger
+from main.config.logging_config import get_logger
 from uuid import UUID
 import uuid
 

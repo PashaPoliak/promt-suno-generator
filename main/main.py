@@ -8,9 +8,9 @@ from fastapi.middleware.cors import CORSMiddleware
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
 
-from v1 import router as api_router
-from v2 import router as api_v2_router
-from v3 import router as api_v3_router
+from .v1 import router as api_router
+from .v2 import router as api_v2_router
+from .v3 import router as api_v3_router
 from .config.init_db import init_db
 from .config.session import engine_embed, engine_postgres
 
