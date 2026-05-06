@@ -4,7 +4,7 @@ import requests
 
 app = Flask(__name__)
 
-# Initialize reader globally to avoid reloading model on every request
+# Load model once at startup
 reader = easyocr.Reader(['en'], gpu=False)
 
 SERVER_URL = 'https://ocr-vh1p.onrender.com/api/text'
@@ -18,18 +18,16 @@ def process_image():
         file = request.files['image']
         img_bytes = file.read()
         
-        # OCR extraction
         results = reader.readtext(img_bytes)
         text = ' '.join([result[1] for result in results]).strip()
         
         if not text:
             return jsonify({'status': 'empty'}), 200
             
-        # Send to Gallery
         payload = {'filename': 'capture.jpg', 'text': text}
         response = requests.post(SERVER_URL, json=payload, timeout=10)
         
-        return jsonify({'status': 'success', 'forward_status': response.status_code})
+        return jsonify({'status': 'success', 'ocr': text})
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
@@ -76,4 +74,4 @@ def camera():
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=3000)
- 
+    
