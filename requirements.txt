@@ -2,3 +2,4 @@ flask
 easyocr
 requests
 gunicorn
+opencv-python-headless

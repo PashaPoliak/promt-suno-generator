@@ -1,10 +1,11 @@
 from flask import Flask, request, jsonify, render_template_string
-import os
 import easyocr
 import requests
 
 app = Flask(__name__)
-reader = easyocr.Reader(['en'])
+
+# Initialize reader globally to avoid reloading model on every request
+reader = easyocr.Reader(['en'], gpu=False)
 
 SERVER_URL = 'https://ocr-vh1p.onrender.com/api/text'
 
@@ -17,21 +18,18 @@ def process_image():
         file = request.files['image']
         img_bytes = file.read()
         
+        # OCR extraction
         results = reader.readtext(img_bytes)
         text = ' '.join([result[1] for result in results]).strip()
         
         if not text:
-            return jsonify({'status': 'no text detected'}), 200
+            return jsonify({'status': 'empty'}), 200
             
-        json_data = {
-            'filename': 'capture.jpg',
-            'text': text
-        }
+        # Send to Gallery
+        payload = {'filename': 'capture.jpg', 'text': text}
+        response = requests.post(SERVER_URL, json=payload, timeout=10)
         
-        response = requests.post(SERVER_URL, json=json_data, timeout=10)
-        response.raise_for_status()
-        
-        return jsonify({'status': 'success', 'text': text})
+        return jsonify({'status': 'success', 'forward_status': response.status_code})
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
@@ -43,44 +41,34 @@ def camera():
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body, html { width: 100%; height: 100%; overflow: hidden; background: #000; }
+        body, html { margin: 0; padding: 0; width: 100%; height: 100%; overflow: hidden; background: #000; }
         video { width: 100vw; height: 100vh; object-fit: cover; }
         .shutter {
             position: absolute; bottom: 30px; left: 50%; transform: translateX(-50%);
-            width: 70px; height: 70px; background: white; border-radius: 50%; border: none;
+            width: 70px; height: 70px; background: #fff; border-radius: 50%; border: none;
         }
     </style>
 </head>
 <body>
-    <video id="video" autoplay playsinline></video>
-    <button class="shutter" onclick="takePhoto()"></button>
-    <canvas id="canvas" style="display:none;"></canvas>
+    <video id="v" autoplay playsinline></video>
+    <button class="shutter" onclick="snap()"></button>
+    <canvas id="c" style="display:none;"></canvas>
     <script>
-        const video = document.getElementById('video');
-        async function start() {
-            const stream = await navigator.mediaDevices.getUserMedia({
-                video: { 
-                    facingMode: 'environment',
-                    width: { ideal: window.innerWidth },
-                    height: { ideal: window.innerHeight }
-                }
-            });
-            video.srcObject = stream;
+        const v = document.getElementById('v');
+        navigator.mediaDevices.getUserMedia({video: {facingMode: 'environment'}})
+            .then(s => v.srcObject = s);
+
+        function snap() {
+            const c = document.getElementById('c');
+            c.width = v.videoWidth;
+            c.height = v.videoHeight;
+            c.getContext('2d').drawImage(v, 0, 0);
+            c.toBlob(b => {
+                const f = new FormData();
+                f.append('image', b, 'p.jpg');
+                fetch('/api/image', {method: 'POST', body: f});
+            }, 'image/jpeg', 0.8);
         }
-        async function takePhoto() {
-            const canvas = document.getElementById('canvas');
-            canvas.width = video.videoWidth;
-            canvas.height = video.videoHeight;
-            canvas.getContext('2d').drawImage(video, 0, 0);
-            
-            canvas.toBlob(async (blob) => {
-                const formData = new FormData();
-                formData.append('image', blob, 'photo.jpg');
-                await fetch('/api/image', { method: 'POST', body: formData });
-            }, 'image/jpeg', 0.9);
-        }
-        start();
     </script>
 </body>
 </html>
@@ -88,5 +76,4 @@ def camera():
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=3000)
-    
  
