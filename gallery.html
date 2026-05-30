@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gallery</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: #0d0d0d; color: #fff; font-family: 'Segoe UI', sans-serif;
+            min-height: 100vh; padding: 20px;
+        }
+
+        .btn {
+            padding: 8px 18px; border: none; border-radius: 8px; cursor: pointer;
+            font-size: 0.85rem; font-weight: 500; transition: all 0.2s;
+        }
+        .btn-primary { background: #6c5ce7; color: #fff; }
+        .btn-primary:hover { background: #5a4bd1; }
+        .btn-danger { background: #e74c3c; color: #fff; }
+        .btn-danger:hover { background: #c0392b; }
+        .btn-secondary { background: #333; color: #ccc; }
+        .btn-secondary:hover { background: #444; }
+        .btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+        /* Gallery grid */
+        #gallery {
+            display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: 12px; transition: all 0.3s ease;
+        }
+        .gallery-item {
+            position: relative; border-radius: 8px; overflow: hidden;
+            background: #1a1a1a; cursor: pointer; transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .gallery-item:hover { transform: translateY(-2px); box-shadow: 0 4px 20px rgba(108,92,231,0.3); }
+        .gallery-item img {
+            width: 100%; height: 180px; object-fit: cover; display: block;
+            transition: transform 0.3s;
+        }
+        .gallery-item:hover img { transform: scale(1.05); }
+
+        /* Delete button on image */
+        .delete-btn {
+            position: absolute; top: 8px; right: 8px;
+            width: 30px; height: 30px; border-radius: 50%;
+            background: rgba(231, 76, 60, 0.85); border: none; color: #fff;
+            font-size: 1rem; cursor: pointer; display: flex; align-items: center;
+            justify-content: center; opacity: 0; transition: opacity 0.2s, background 0.2s;
+            z-index: 2;
+        }
+        .gallery-item:hover .delete-btn { opacity: 1; }
+        .delete-btn:hover { background: rgba(192, 57, 43, 1); }
+
+        /* Selection checkbox */
+        .select-btn {
+            position: absolute; top: 8px; left: 8px;
+            width: 24px; height: 24px; border-radius: 4px;
+            background: rgba(0,0,0,0.5); border: 2px solid #888; color: #fff;
+            font-size: 0.75rem; cursor: pointer; display: flex; align-items: center;
+            justify-content: center; opacity: 0; transition: opacity 0.2s;
+            z-index: 2;
+        }
+        .gallery-item:hover .select-btn { opacity: 1; }
+        .gallery-item.selected .select-btn { opacity: 1; background: #6c5ce7; border-color: #6c5ce7; }
+        .gallery-item.selected { outline: 2px solid #6c5ce7; }
+
+        /* Image label */
+        .img-label {
+            position: absolute; bottom: 0; left: 0; right: 0;
+            background: linear-gradient(transparent, rgba(0,0,0,0.8));
+            padding: 20px 8px 6px; font-size: 0.7rem; color: #aaa;
+        }
+
+        /* Fullscreen overlay */
+        .fullscreen-overlay {
+            display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.95);
+            z-index: 100; flex-direction: column; align-items: center; justify-content: center;
+        }
+        .fullscreen-overlay.active { display: flex; }
+        .fullscreen-overlay img {
+            max-width: 95vw; max-height: 85vh; object-fit: contain; border-radius: 8px;
+        }
+        .fullscreen-controls {
+            position: absolute; bottom: 20px; display: flex; gap: 12px; align-items: center;
+        }
+        .fullscreen-close {
+            position: absolute; top: 20px; right: 20px;
+            width: 40px; height: 40px; border-radius: 50%;
+            background: rgba(255,255,255,0.1); border: none; color: #fff;
+            font-size: 1.5rem; cursor: pointer; display: flex; align-items: center;
+            justify-content: center; transition: background 0.2s;
+        }
+        .fullscreen-close:hover { background: rgba(255,255,255,0.2); }
+        .fullscreen-nav {
+            width: 44px; height: 44px; border-radius: 50%;
+            background: rgba(255,255,255,0.1); border: none; color: #fff;
+            font-size: 1.3rem; cursor: pointer; display: flex; align-items: center;
+            justify-content: center; transition: background 0.2s;
+        }
+        .fullscreen-nav:hover { background: rgba(255,255,255,0.2); }
+        .fullscreen-filename { color: #aaa; font-size: 0.85rem; }
+        .fullscreen-counter { color: #666; font-size: 0.8rem; margin: 0 10px; }
+
+        /* Empty state */
+        .empty-state {
+            text-align: center; padding: 80px 20px; color: #555;
+        }
+        .empty-state .icon { font-size: 3rem; margin-bottom: 16px; }
+        .empty-state p { font-size: 1rem; }
+
+        /* Bulk action bar */
+        .bulk-bar {
+            display: none; position: fixed; bottom: 0; left: 0; right: 0;
+            background: #1a1a1a; border-top: 1px solid #333;
+            padding: 12px 20px; z-index: 50;
+            justify-content: space-between; align-items: center;
+        }
+        .bulk-bar.active { display: flex; }
+        .bulk-bar .selected-count { color: #aaa; font-size: 0.9rem; }
+
+        /* Loading */
+        .loading { text-align: center; padding: 60px; color: #555; }
+    </style>
+</head>
+<body>
+    <div id="gallery" class="loading">Loading images...</div>
+
+    <div class="fullscreen-overlay" id="fullscreenOverlay">
+
+        <img id="fullscreenImg" src="" alt="" onclick="closeFullscreen()">
+        <div class="fullscreen-controls">
+            <button class="fullscreen-nav" onclick="navImage(-1)">◀</button>
+            <span class="fullscreen-filename" id="fsFilename"></span>
+            <span class="fullscreen-counter" id="fsCounter"></span>
+            <button class="fullscreen-nav" onclick="navImage(1)">▶</button>
+        </div>
+    </div>
+
+    <!-- Bulk action bar -->
+    <div class="bulk-bar" id="bulkBar">
+        <span class="selected-count" id="selectedCount">0 selected</span>
+        <div style="display:flex; gap:10px;">
+            <button class="btn btn-secondary" onclick="clearSelection()">Cancel</button>
+            <button class="btn btn-danger" onclick="bulkDelete()">🗑️ Delete Selected</button>
+        </div>
+    </div>
+
+    <script>
+        const galleryEl = document.getElementById('gallery');
+        const fullscreenOverlay = document.getElementById('fullscreenOverlay');
+        const fullscreenImg = document.getElementById('fullscreenImg');
+        const fsFilename = document.getElementById('fsFilename');
+        const fsCounter = document.getElementById('fsCounter');
+        const selectedCountEl = document.getElementById('selectedCount');
+        const bulkBar = document.getElementById('bulkBar');
+
+        let images = [];
+        let selectedIds = new Set();
+        let fullscreenIndex = -1;
+        let isFullscreenMode = false;
+
+        function loadImages() {
+            fetch('/images')
+                .then(r => r.json())
+                .then(data => {
+                    images = data;
+                    selectedIds.clear();
+                    updateBulkUI();
+                    renderGallery();
+                })
+                .catch(err => {
+                    galleryEl.innerHTML = '<div class="empty-state"><div class="icon">⚠️</div><p>Failed to load images</p></div>';
+                    galleryEl.classList.remove('loading');
+                });
+        }
+
+        function renderGallery() {
+            if (images.length === 0) {
+                galleryEl.innerHTML = '<div class="empty-state"><div class="icon">📷</div><p>No images yet. Capture some screenshots first!</p></div>';
+                galleryEl.classList.remove('loading');
+                return;
+            }
+
+            galleryEl.innerHTML = images.map((img, i) => `
+                <div class="gallery-item ${selectedIds.has(img.filename) ? 'selected' : ''}" data-index="${i}" data-filename="${img.filename}">
+                    <button class="select-btn" onclick="event.stopPropagation(); toggleSelect('${img.filename}')" title="Select">✓</button>
+                    <button class="delete-btn" onclick="event.stopPropagation(); deleteImage('${img.filename}')" title="Delete image">✕</button>
+                    <img src="${img.url}" alt="${img.filename}" loading="lazy" onclick="openFullscreen(${i})">
+                </div>
+            `).join('');
+
+            galleryEl.classList.remove('loading');
+        }
+
+        function openFullscreen(index) {
+            fullscreenIndex = index;
+            isFullscreenMode = true;
+            const img = images[index];
+            fullscreenImg.src = img.url;
+            fsFilename.textContent = img.filename;
+            fsCounter.textContent = `${index + 1} / ${images.length}`;
+            fullscreenOverlay.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeFullscreen() {
+            isFullscreenMode = false;
+            fullscreenOverlay.classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        function navImage(dir) {
+            let newIndex = fullscreenIndex + dir;
+            if (newIndex < 0) newIndex = images.length - 1;
+            if (newIndex >= images.length) newIndex = 0;
+            openFullscreen(newIndex);
+        }
+
+        // Delete single image
+        function deleteImage(filename) {
+            if (!confirm(`Delete "${filename}"?`)) return;
+            fetch(`/api/images/${filename}`, { method: 'DELETE' })
+                .then(r => r.json())
+                .then(() => loadImages())
+                .catch(err => alert('Delete failed: ' + err.message));
+        }
+
+        // Delete from fullscreen view
+        function deleteFromFullscreen() {
+            if (fullscreenIndex < 0) return;
+            const img = images[fullscreenIndex];
+            if (!confirm(`Delete "${img.filename}"?`)) return;
+            fetch(`/api/images/${img.filename}`, { method: 'DELETE' })
+                .then(r => r.json())
+                .then(() => {
+                    if (images.length <= 1) {
+                        closeFullscreen();
+                        loadImages();
+                    } else {
+                        if (fullscreenIndex >= images.length - 1) {
+                            fullscreenIndex = images.length - 2;
+                        }
+                        loadImages();
+                    }
+                })
+                .catch(err => alert('Delete failed: ' + err.message));
+        }
+
+        // Selection
+        function toggleSelect(filename) {
+            if (selectedIds.has(filename)) {
+                selectedIds.delete(filename);
+            } else {
+                selectedIds.add(filename);
+            }
+            updateBulkUI();
+            renderGallery();
+        }
+
+        function clearSelection() {
+            selectedIds.clear();
+            updateBulkUI();
+            renderGallery();
+        }
+
+        function updateBulkUI() {
+            const count = selectedIds.size;
+            selectedCountEl.textContent = `${count} selected`;
+            bulkBar.classList.toggle('active', count > 0);
+        }
+
+        function bulkDelete() {
+            if (selectedIds.size === 0) return;
+
+            const deletes = Array.from(selectedIds).map(filename =>
+                fetch(`/api/images/${filename}`, { method: 'DELETE' }).then(r => r.json())
+            );
+
+            Promise.all(deletes).then(() => {
+                selectedIds.clear();
+                updateBulkUI();
+                loadImages();
+            }).catch(err => alert('Bulk delete failed: ' + err.message));
+        }
+
+        // Keyboard shortcuts
+        document.addEventListener('keydown', e => {
+            if (isFullscreenMode) {
+                if (e.key === 'Escape') closeFullscreen();
+                if (e.key === 'ArrowLeft') navImage(-1);
+                if (e.key === 'ArrowRight') navImage(1);
+                if (e.key === 'Delete' || e.key === 'Backspace') deleteFromFullscreen();
+            }
+        });
+
+        // Init
+        loadImages();
+    </script>
+</body>
+</html>

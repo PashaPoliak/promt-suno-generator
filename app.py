@@ -26,7 +26,7 @@ SCREENSHOT_DIR.mkdir(exist_ok=True)
 
 @app.route("/")
 def index():
-    return send_from_directory(str(BASE_DIR), "src.html")
+    return send_from_directory(str(BASE_DIR), "index.html")
 
 
 @app.route("/api/image", methods=["POST"])
@@ -84,6 +84,27 @@ def list_images():
 @app.route("/screenshots/<path:filename>")
 def serve_screenshot(filename):
     return send_from_directory(str(SCREENSHOT_DIR), filename)
+
+
+@app.route("/api/images/<filename>", methods=["DELETE"])
+def delete_image(filename):
+    """Delete an image by filename."""
+    try:
+        safe_filename = os.path.basename(filename)
+        image_path = SCREENSHOT_DIR / safe_filename
+        if not image_path.exists():
+            return jsonify({"error": "Image not found"}), 404
+        image_path.unlink()
+        logger.info(f"Deleted image: {safe_filename}")
+        return jsonify({"status": "deleted"})
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+
+@app.route("/gallery")
+def gallery():
+    """Serve the gallery page."""
+    return send_from_directory(str(BASE_DIR), "gallery.html")
 
 
 if __name__ == "__main__":
