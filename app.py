@@ -1,85 +1,92 @@
-from flask import Flask, request, jsonify, render_template_string
-import requests
-import base64
+"""
+src.py - Flask server that serves camera capture page and publishes screenshots.
+
+Usage:
+    python src.py
+
+Opens a camera capture interface at http://localhost:3000
+Captured images are saved and displayed in src.html.
+"""
+
 import os
+import logging
+from datetime import datetime
+from pathlib import Path
+from flask import Flask, request, jsonify, send_from_directory
+
+logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s")
+logger = logging.getLogger(__name__)
 
 app = Flask(__name__)
 
-OCR_SPACE_API_KEY = os.environ.get('OCR_API_KEY')
-GALLERY_URL = 'https://ocr-vh1p.onrender.com/api/text'
+BASE_DIR = Path(__file__).parent
+SCREENSHOT_DIR = BASE_DIR / "screenshots"
+SCREENSHOT_DIR.mkdir(exist_ok=True)
 
-@app.route('/api/image', methods=['POST'])
+
+@app.route("/")
+def index():
+    return send_from_directory(str(BASE_DIR), "src.html")
+
+
+@app.route("/api/image", methods=["POST"])
 def process_image():
     try:
-        if not OCR_SPACE_API_KEY:
-            return jsonify({'error': 'Server configuration error: Missing API Key'}), 500
+        if "image" not in request.files:
+            logger.warning("No image in request")
+            return jsonify({"error": "No image"}), 400
 
-        if 'image' not in request.files:
-            return jsonify({'error': 'No image'}), 400
-
-        file = request.files['image']
+        file = request.files["image"]
         img_data = file.read()
-        base64_image = base64.b64encode(img_data).decode('utf-8')
 
-        payload = {
-            'base64Image': f"data:image/jpeg;base64,{base64_image}",
-            'apikey': OCR_SPACE_API_KEY,
-            'language': 'eng',
-        }
+        logger.info(f"Image received: name={file.filename}, content_type={file.content_type}, size={len(img_data)} bytes")
 
-        api_resp = requests.post('https://api.ocr.space/parse/image', data=payload, timeout=15).json()
+        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S_%f")
+        filename = f"{timestamp}.jpg"
+        screenshot_path = SCREENSHOT_DIR / filename
+        screenshot_path.write_bytes(img_data)
 
-        if not api_resp.get('ParsedResults'):
-            return jsonify({'status': 'ocr_failed', 'details': api_resp}), 400
-
-        text = api_resp['ParsedResults'][0]['ParsedText'].strip()
-
-        if text:
-            requests.post(GALLERY_URL, json={'filename': 'capture.jpg', 'text': text}, timeout=10)
-
-        return jsonify({'status': 'success', 'ocr': text})
+        logger.info(f"Image saved to {screenshot_path}")
+        return jsonify({"status": "success", "url": f"/screenshots/{filename}"})
     except Exception as e:
-        return jsonify({'error': str(e)}), 500
+        return jsonify({"error": str(e)}), 500
 
-@app.route('/')
-def camera():
-    return render_template_string('''
-<!DOCTYPE html>
-<html>
-<head>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <style>
-        body, html { margin: 0; padding: 0; width: 100%; height: 100%; overflow: hidden; background: #000; }
-        video { width: 100vw; height: 100vh; object-fit: cover; }
-        .shutter {
-            position: absolute; bottom: 30px; left: 50%; transform: translateX(-50%);
-            width: 70px; height: 70px; background: #fff; border-radius: 50%; border: none;
-        }
-    </style>
-</head>
-<body>
-    <video id="v" autoplay playsinline></video>
-    <button class="shutter" onclick="snap()"></button>
-    <canvas id="c" style="display:none;"></canvas>
-    <script>
-        const v = document.getElementById('v');
-        navigator.mediaDevices.getUserMedia({video: {facingMode: 'environment'}})
-            .then(s => v.srcObject = s);
-        function snap() {
-            const c = document.getElementById('c');
-            c.width = v.videoWidth;
-            c.height = v.videoHeight;
-            c.getContext('2d').drawImage(v, 0, 0);
-            c.toBlob(b => {
-                const f = new FormData();
-                f.append('image', b, 'p.jpg');
-                fetch('/api/image', {method: 'POST', body: f});
-            }, 'image/jpeg', 0.6);
-        }
-    </script>
-</body>
-</html>
-''')
 
-if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=3000)
+@app.route("/image")
+def get_image():
+    """Return the most recently captured image."""
+    files = sorted(
+        [f for f in SCREENSHOT_DIR.iterdir() if f.suffix.lower() in (".jpg", ".jpeg", ".png")],
+        key=lambda f: f.stat().st_mtime,
+        reverse=True,
+    )
+    if not files:
+        logger.warning("No image available yet")
+        return jsonify({"error": "No image captured yet"}), 404
+    latest = files[0]
+    logger.info(f"Serving image: {latest}")
+    return send_from_directory(str(SCREENSHOT_DIR), latest.name)
+
+
+@app.route("/images")
+def list_images():
+    """Return a JSON list of all saved screenshots."""
+    files = sorted(
+        [f for f in SCREENSHOT_DIR.iterdir() if f.suffix.lower() in (".jpg", ".jpeg", ".png")],
+        key=lambda f: f.stat().st_mtime,
+        reverse=True,
+    )
+    images = [{"filename": f.name, "url": f"/screenshots/{f.name}"} for f in files]
+    logger.info(f"Listing {len(images)} images")
+    return jsonify(images)
+
+
+@app.route("/screenshots/<path:filename>")
+def serve_screenshot(filename):
+    return send_from_directory(str(SCREENSHOT_DIR), filename)
+
+
+if __name__ == "__main__":
+    print("Starting server at http://localhost:3000")
+    print("Open http://localhost:3000 in a browser to capture a screenshot.")
+    app.run(host="0.0.0.0", port=3000, debug=True)

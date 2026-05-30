@@ -2,343 +2,44 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Search</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Camera</title>
     <style>
-        :root {
-            --bg: #f4f4f9;
-            --surface: #ffffff;
-            --text: #222;
-            --border: #ddd;
-            --accent: #2e7d32;
-            --accent-light: #e8f5e9;
-            --match: yellow;
-            --input-bg: white;
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body, html {
+            width: 100%; height: 100%; overflow: hidden;
+            background: #000; font-family: sans-serif;
         }
-        .dark {
-            --bg: #0f1117;
-            --surface: #161b22;
-            --text: #c9d1d9;
-            --border: #30363d;
-            --accent: #3fb950;
-            --accent-light: #1f2a1f;
-            --match: #f2cc60;
-            --input-bg: #21262d;
+        #v { width: 100vw; height: 100vh; object-fit: cover; }
+        .shutter {
+            position: absolute; bottom: 30px; left: 50%; transform: translateX(-50%);
+            width: 70px; height: 70px; background: #fff; border-radius: 50%; border: none;
+            cursor: pointer; box-shadow: 0 0 10px rgba(0,0,0,0.5);
         }
-
-        body {
-            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-            font-size: 15px;
-            -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
-            margin: 0 0 0 20px;
-            background: var(--bg);
-            color: var(--text);
-            transition: background .2s, color .2s;
-        }
-
-        .search-wrapper {
-            position: sticky;
-            top: 0;
-            z-index: 10;
-        }
-        .search-wrapper > div:first-child {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .search-box {
-            width: 100%;
-            padding: 5px;
-            font-size: 18px;
-            margin-bottom: 0;
-            border: 1px solid var(--border);
-            background: var(--input-bg);
-            color: var(--text);
-            box-sizing: border-box;
-        }
-
-        #suggestions {
-            background: var(--surface);
-            border: 1px solid var(--border);
-            border-top: none;
-            box-sizing: border-box;
-            width: 100%;
-        }
-
-        .suggestion {
-            padding: 6px 10px;
-            cursor: pointer;
-            font-size: 14px;
-            color: var(--text);
-        }
-
-        .suggestion:hover, .suggestion.selected {
-            background: var(--accent-light);
-            color: var(--accent);
-        }
-
-        .card {
-            background: var(--surface);
-            padding: 10px;
-            border-radius: 8px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-            box-sizing: border-box;
-            width: 100%;
-            margin: 0;
-            color: var(--text);
-            border: 1px solid var(--border);
-        }
-
-        h4 {
-            font-weight: 600;
-            font-size: 16px;
-            line-height: 1.4;
-            margin: 0 0 6px 0;
-        }
-
-        .correct {
-            color: var(--accent);
-            font-weight: 600;
-            font-size: 14.5px;
-            line-height: 1.4;
-            margin-top: 8px;
-        }
-
-        .match {
-            background: var(--match);
-            color: #000;
-        }
-
-        .main-content {
-            padding: 20px;
-            position: relative;
-            overflow-x: auto;
-        }
-
-        #results {
-            display: grid;
-            grid-template-columns: repeat(3, minmax(120px, 1fr));
-            gap: 5px;
-            margin-top: 5px;
-        }
+        .shutter:active { transform: translateX(-50%) scale(0.9); }
     </style>
 </head>
 <body>
+    <video id="v" autoplay playsinline></video>
+    <button class="shutter" onclick="snap()"></button>
+    <canvas id="c" style="display:none;"></canvas>
+    <script>
+        const v = document.getElementById('v');
 
-<div class="main-content">
-    <div class="search-wrapper">
-        <div style="display: flex; align-items: center; gap: 8px;">
-            <input type="text" id="searchInput" class="search-box" autofocus placeholder="Search questions ..." style="flex: 1;">
-            <button id="themeToggle" title="Toggle dark/light" style="padding: 4px 8px; font-size: 16px; cursor: pointer; border: 1px solid var(--border); background: var(--surface); border-radius: 4px; flex-shrink: 0;">🌙</button>
-        </div>
-        <div id="suggestions"></div>
-    </div>
-    <div id="results"></div>
-</div>
+        navigator.mediaDevices.getUserMedia({video: {facingMode: 'environment'}})
+            .then(s => v.srcObject = s);
 
-<script src="data.js"></script>
-<script>
-    const searchInput = document.getElementById('searchInput');
-    const resultsDiv = document.getElementById('results');
-    const suggestionsDiv = document.getElementById('suggestions');
-
-    let selectedIndex = -1;
-    let allWords = [];
-    let victSet = new Set();
-
-    function buildWordList() {
-        const wordFreq = new Map();
-        examData.data.forEach(q => {
-            const qWords = q.question.split(/[^\w\/-]+/).filter(Boolean);
-            const aWords = (q.correctAnswer || '').split(/[^\w\/-]+/).filter(Boolean);
-            [...qWords, ...aWords].forEach(w => {
-                const lower = w.toLowerCase();
-                wordFreq.set(lower, (wordFreq.get(lower) || 0) + 1);
-            });
-        });
-        allWords = Array.from(wordFreq.entries())
-            .sort((a, b) => b[1] - a[1])
-            .map(([word]) => word);
-            
-        allWords.sort((a, b) => {
-            const aIn = victSet.has(a);
-            const bIn = victSet.has(b);
-            if (aIn && !bIn) return -1;
-            if (!aIn && bIn) return 1;
-            return 0;
-        });
-    }
-
-    function highlight(text, terms) {
-        if (!terms || terms.length === 0) return text;
-        let highlighted = text;
-        terms.forEach(term => {
-            const escaped = term.replace(/[.*+?^${}()|[\]\\/-]/g, '\\$&');
-            highlighted = highlighted.replace(new RegExp(`(${escaped})`, 'gi'), '<span class="match">$1</span>');
-        });
-        return highlighted;
-    }
-
-    function matchesSearch(q, searchTerms) {
-        if (searchTerms.length === 0) return true;
-        const qWords = q.question.toLowerCase().split(/[^\w\/-]+/).filter(Boolean);
-        const aWords = (q.correctAnswer || '').toLowerCase().split(/[^\w\/-]+/).filter(Boolean);
-        const words = [...qWords, ...aWords];
-        return searchTerms.every(term => words.some(word => word.startsWith(term)));
-    }
-
-    function render(filter = '') {
-        if (typeof examData === 'undefined') return;
-        resultsDiv.innerHTML = '';
-
-        const searchTerms = filter.toLowerCase().trim().split(/\s+/).filter(Boolean);
-        const filtered = examData.data.filter(q => matchesSearch(q, searchTerms));
-
-        filtered.forEach(q => {
-            const div = document.createElement('div');
-            div.className = 'card';
-            div.innerHTML = `
-                <div class="question">${highlight(q.question, searchTerms)}</div>
-                <div class="correct">${highlight(q.correctAnswer, searchTerms)}</div>
-            `;
-            resultsDiv.appendChild(div);
-        });
-    }
-
-    function updateSuggestions(val) {
-        const words = val.split(/\s+/);
-        const currentWord = words[words.length - 1] || '';
-        const lowerCurrent = currentWord.toLowerCase().trim();
-        if (lowerCurrent) {
-            const searchTerms = val.toLowerCase().trim().split(/\s+/).filter(Boolean);
-            const filtered = examData.data.filter(q => matchesSearch(q, searchTerms));
-            const wordFreq = new Map();
-            filtered.forEach(q => {
-                const qWords = q.question.split(/[^\w\/-]+/).filter(Boolean);
-                const aWords = (q.correctAnswer || '').split(/[^\w\/-]+/).filter(Boolean);
-                [...qWords, ...aWords].forEach(w => {
-                    const lower = w.toLowerCase();
-                    wordFreq.set(lower, (wordFreq.get(lower) || 0) + 1);
-                });
-            });
-            const filteredWords = Array.from(wordFreq.entries())
-                .sort((a, b) => b[1] - a[1])
-                .map(([word]) => word);
-            const matches = filteredWords.filter(word => word.toLowerCase().startsWith(lowerCurrent) && word.toLowerCase() !== lowerCurrent).slice(0, 5);
-            suggestionsDiv.innerHTML = matches.map(word => `<div class="suggestion">${word}</div>`).join('');
-            selectedIndex = -1;
-        } else {
-            suggestionsDiv.innerHTML = '';
-            selectedIndex = -1;
+        function snap() {
+            const c = document.getElementById('c');
+            c.width = v.videoWidth;
+            c.height = v.videoHeight;
+            c.getContext('2d').drawImage(v, 0, 0);
+            c.toBlob(b => {
+                const f = new FormData();
+                f.append('image', b, 'p.jpg');
+                fetch('/api/image', {method: 'POST', body: f});
+            }, 'image/jpeg', 0.6);
         }
-    }
-
-    function fillSuggestion(selectedWord) {
-        const val = searchInput.value;
-        const words = val.split(/\s+/);
-        words[words.length - 1] = selectedWord;
-        searchInput.value = words.join(' ');
-        suggestionsDiv.innerHTML = '';
-        selectedIndex = -1;
-        render(searchInput.value);
-    }
-
-    function updateSelection(suggestions) {
-        suggestions.forEach((s, i) => s.classList.toggle('selected', i === selectedIndex));
-    }
-
-    searchInput.addEventListener('input', e => {
-        updateSuggestions(e.target.value);
-        render(e.target.value);
-    });
-
-    suggestionsDiv.addEventListener('click', e => {
-        if (e.target.classList.contains('suggestion')) {
-            fillSuggestion(e.target.textContent);
-            searchInput.focus();
-        }
-    });
-
-    searchInput.addEventListener('keydown', function(event) {
-        const suggestions = suggestionsDiv.querySelectorAll('.suggestion');
-
-        if (suggestions.length > 0) {
-            if (event.key === 'ArrowDown') {
-                event.preventDefault();
-                selectedIndex = (selectedIndex + 1) % suggestions.length;
-                updateSelection(suggestions);
-            } else if (event.key === 'ArrowUp') {
-                event.preventDefault();
-                selectedIndex = selectedIndex <= 0 ? suggestions.length - 1 : selectedIndex - 1;
-                updateSelection(suggestions);
-            } else if (event.key === 'ArrowRight') {
-                if (selectedIndex < 0 && suggestions.length > 0) {
-                    selectedIndex = 0;
-                }
-                if (selectedIndex >= 0) {
-                    event.preventDefault();
-                    fillSuggestion(suggestions[selectedIndex].textContent + ' ');
-                }
-            } else if (event.key === 'Escape') {
-                suggestionsDiv.innerHTML = '';
-                selectedIndex = -1;
-            }
-        }
-    });
-
-    document.addEventListener('keydown', function(event) {
-        if (event.key === 'Enter') {
-            event.preventDefault();
-            searchInput.value = '';
-            render('');
-            searchInput.focus();
-        }
-    });
-
-    searchInput.addEventListener('blur', () => {
-        setTimeout(() => { suggestionsDiv.innerHTML = ''; selectedIndex = -1; }, 150);
-    });
-
-    const checkData = () => {
-        if (typeof examData !== 'undefined') {
-            buildWordList();
-            render();
-        } else {
-            setTimeout(checkData, 50);
-        }
-    };
-    checkData();
-
-    // Dark / Light theme toggle
-    (function initTheme() {
-        const toggleBtn = document.getElementById('themeToggle');
-        const root = document.documentElement;
-
-        function setTheme(dark) {
-            if (dark) {
-                root.classList.add('dark');
-                toggleBtn.textContent = '☀️';
-            } else {
-                root.classList.remove('dark');
-                toggleBtn.textContent = '🌙';
-            }
-            localStorage.setItem('faq-theme', dark ? 'dark' : 'light');
-        }
-
-        // Initial theme: saved preference or system
-        const saved = localStorage.getItem('faq-theme');
-        if (saved === 'dark' || (!saved && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-            setTheme(true);
-        } else {
-            setTheme(false);
-        }
-
-        toggleBtn.addEventListener('click', () => {
-            const isDark = root.classList.contains('dark');
-            setTheme(!isDark);
-        });
-    })();
-</script>
+    </script>
 </body>
 </html>
